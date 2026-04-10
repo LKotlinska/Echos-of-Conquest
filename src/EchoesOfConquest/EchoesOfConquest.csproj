@@ -7,9 +7,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Characters\" />
-    <Folder Include="Models\Items\" />
-  </ItemGroup>
-
 </Project>
