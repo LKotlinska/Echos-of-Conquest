@@ -2,13 +2,15 @@ namespace EchoesOfConquest.Models;
 
 public class HealthPotion : Item
 {
-    public override string Name { get; } = "Health Potion";
+    public int HealAmount { get; set; }
 
-    public int Vitality { get; } = 20;
-
-    public override void Use(Player player)
+    public HealthPotion(string name, int healAmount) : base(name)
     {
-        player.Health += Vitality;
-        Console.WriteLine($"{player.Name} drank a {Name}. Restored {Vitality} points.");
+        HealAmount = healAmount;
+    }
+
+    public override string GetInfo()
+    {
+        Console.WriteLine($"{Name} | Heals {HealAmount} HP");
     }
 }
