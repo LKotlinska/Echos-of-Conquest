@@ -11,6 +11,6 @@ public class HealthPotion : Item
 
     public override string GetInfo()
     {
-        Console.WriteLine($"{Name} | Heals {HealAmount} HP");
+        return ($"{Name} | Heals {HealAmount} HP");
     }
 }

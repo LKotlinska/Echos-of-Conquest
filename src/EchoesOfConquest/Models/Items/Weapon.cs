@@ -18,8 +18,8 @@ public class Weapon : Item
         return DiceRoller.Roll(DamageSides);
     }
 
-    public override string GetInto()
+    public override string GetInfo()
     {
-        Console.WriteLine($"{Name} | {Rarity} | Dice d{DamageSides} | {RequiredClass}");
+        return ($"{Name} | {Rarity} | Dice d{DamageSides} | {RequiredClass}");
     }
 }
