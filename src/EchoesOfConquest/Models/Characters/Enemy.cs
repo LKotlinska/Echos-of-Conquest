@@ -26,7 +26,7 @@ public class Enemy
 
     public bool RollToHit(int targetArmor)
     {
-        return DiceRoller.Roll(20) + GetModifier(_attackBonus) >= targetArmor;
+        return DiceRoller.Roll(20) + _attackBonus >= targetArmor;
     }
 
     public int RollDamage()
@@ -44,8 +44,8 @@ public class Enemy
         return _loot;
     }
 
-    private int GetModifier(int score)
+    public void GetStatus()
     {
-        return (score - 10) / 2;
+        Console.WriteLine($"{Name} - HP: {Health}/{_maxHealth} | AC: {ArmorClass}");
     }
 }
