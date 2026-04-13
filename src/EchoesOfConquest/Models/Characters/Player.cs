@@ -12,7 +12,7 @@ public class Player
 
     private int _strength;
     private bool _isDefending;
-    private Weapon _equippedWeapon;
+    private Weapon? _equippedWeapon;
     private List<Item> _inventory = new();
 
     public Player(string name, PlayerClass playerClass)
@@ -33,17 +33,39 @@ public class Player
 
     public int RollDamage()
     {
-        return _equippedWeapon.RollDamage();
+        if (_equippedWeapon != null)
+        {
+            return _equippedWeapon.RollDamage();
+        }
+        else
+        {
+            return DiceRoller.Roll(4);
+        }
     }
 
     public void TakeDamage(int damage)
     {
+        if (_isDefending)
+        {
+            Health -= (damage / 2);
+        }
+
         Health -= damage;
     }
 
     public void Heal(int amount)
     {
         Health += amount;
+    }
+    public void Defend()
+    {
+        _isDefending = true;
+        Console.WriteLine($"{Name} takes a defensive stance (damage halved this turn)!");
+    }
+
+    public void ResetDefend()
+    {
+        _isDefending = false;
     }
 
     public void AddToInventory(Item item)
@@ -56,13 +78,33 @@ public class Player
         if (_inventory.Count == 0)
         {
             Console.WriteLine("Inventory is empty.");
+            return;
         }
         for (int i = 0; i < _inventory.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {_inventory[i].GetInfo()}");
+            Console.WriteLine($"[{i + 1}] {_inventory[i].GetInfo()}");
         }
     }
 
+    public void UseItem(int choice)
+    {
+        if (choice < 1)
+        {
+            return;
+        }
+
+        if (_inventory[choice - 1] is HealthPotion potion)
+        {
+            Heal(potion.HealAmount);
+            Console.WriteLine($"You drink {potion.Name} and restore {potion.HealAmount} HP!");
+            _inventory.RemoveAt(choice - 1);
+        }
+        else if (_inventory[choice - 1] is Weapon weapon)
+        {
+            _equippedWeapon = weapon;
+            Console.WriteLine($"You equip {weapon.Name}!");
+        }
+    }
     private int GetModifier(int score)
     {
         return (score - 10) / 2;
