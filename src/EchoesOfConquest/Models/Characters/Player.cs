@@ -3,32 +3,27 @@ namespace EchoesOfConquest.Models;
 public class Player
 {
     public string Name { get; set; }
-    public int Level { get; set; } = 1;
-    public int Health { get; set; } = 100;
-    public int MaxHealth { get; set; } = 100;
-    public int Damage { get; set; } = 15;
-    public List<Item> Inventory = new List<Item>();
+    public PlayerClass PlayerClass { get; set; }
+    public int Health { get; set; }
+    public int MaxHealth { get; set; }
+    public int ArmorClass { get; set; }
+    public bool IsAlive => Health > 0;
 
-    public Player(string name)
+
+    private int _strength;
+    private bool _isDefending;
+    private Weapon _equippedWeapon;
+    private List<Item> _inventory = new();
+
+    public Player(string name, PlayerClass playerClass)
     {
         Name = name;
+        PlayerClass = playerClass;
+        MaxHealth = playerClass.MaxHealth;
+        Health = playerClass.MaxHealth;
+        ArmorClass = playerClass.ArmorClass;
+        _strength = playerClass.Strength;
+        _equippedWeapon = playerClass.StartingWeapon;
     }
 
-    public void Attack(Enemy enemy)
-    {
-        if (enemy.Health <= Damage)
-        {
-            enemy.Health = 0;
-            Console.WriteLine($"{enemy.Name} has been slain. You won!");
-            return;
-        }
-
-        enemy.Health -= Damage;
-        Console.WriteLine($"{enemy.Name} has been hit! HP left: {enemy.Health}");
-    }
-
-    public void AddToInventory(Item item)
-    {
-        Inventory.Add(item);
-    }
 }
