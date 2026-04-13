@@ -24,5 +24,23 @@ public class Enemy
     }
 
 
+    public bool RollToHit(int targetArmor)
+    {
+        return DiceRoller.Roll(20) + GetModifier(_attackBonus) >= targetArmor;
+    }
 
+    public int RollDamage()
+    {
+        return DiceRoller.Roll(_damageSides);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+    }
+
+    private int GetModifier(int score)
+    {
+        return (score - 10) / 2;
+    }
 }

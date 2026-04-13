@@ -26,4 +26,26 @@ public class Player
         _equippedWeapon = playerClass.StartingWeapon;
     }
 
+    public bool RollToHit(int targetArmor)
+    {
+        return DiceRoller.Roll(20) + GetModifier(_strength) >= targetArmor;
+    }
+
+    public int RollDamage()
+    {
+        return _equippedWeapon.RollDamage();
+    }
+
+
+    public void Heal(int amount)
+    {
+        Health += amount;
+    }
+
+    private int GetModifier(int score)
+    {
+        return (score - 10) / 2;
+    }
+
+
 }
