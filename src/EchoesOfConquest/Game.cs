@@ -59,19 +59,19 @@ public class Game
         List<Enemy> enemies = new List<Enemy>();
 
         HealthPotion smallPotion = new HealthPotion("Small Potion", 15);
-        Enemy goblin = new Enemy("Goblin", 30, 2, 4, 10, smallPotion);
+        Enemy goblin = new Enemy("Goblin", 40, 2, 4, 10, smallPotion);
 
         Weapon axe = new Weapon("Axe", 8);
-        Enemy orc = new Enemy("Orc", 50, 4, 6, 12, axe);
+        Enemy orc = new Enemy("Orc", 50, 4, 6, 14, axe);
 
         HealthPotion largePotion = new HealthPotion("Large Potion", 30);
-        Enemy skeleton = new Enemy("Skeleton", 40, 3, 6, 13, largePotion);
+        Enemy skeleton = new Enemy("Skeleton", 60, 3, 6, 13, largePotion);
 
         Weapon magicStaff = new Weapon("Magic Staff", 6, "Wizard");
-        Enemy darkMage = new Enemy("Dark Mage", 60, 5, 8, 11, magicStaff);
+        Enemy darkMage = new Enemy("Dark Mage", 60, 6, 10, 10, magicStaff);
 
         Weapon rapiers = new Weapon("Rapiers", 7, "Rogue");
-        Enemy dragon = new Enemy("Dragon", 100, 7, 10, 15, rapiers);
+        Enemy dragon = new Enemy("Dragon", 100, 8, 12, 20, rapiers);
 
         enemies.AddRange(new List<Enemy>() { goblin, orc, skeleton, darkMage, dragon });
         return enemies;
