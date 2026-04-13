@@ -7,7 +7,7 @@ public static class DiceRoller
 
     public static int Roll(int sides)
     {
-        return _random.Next(sides);
+        return _random.Next(1, sides + 1);
     }
 
     public static int RollDiceModifier(int sides, int modifier)
