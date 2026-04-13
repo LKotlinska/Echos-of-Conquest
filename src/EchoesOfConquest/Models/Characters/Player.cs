@@ -36,10 +36,19 @@ public class Player
         return _equippedWeapon.RollDamage();
     }
 
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+    }
 
     public void Heal(int amount)
     {
         Health += amount;
+    }
+
+    public void AddToInventory(Item item)
+    {
+        _inventory.Add(item);
     }
 
     private int GetModifier(int score)
@@ -47,5 +56,9 @@ public class Player
         return (score - 10) / 2;
     }
 
+    public void GetStatus()
+    {
+        Console.WriteLine($"{Name} ({PlayerClass.Name}) — HP: {Health}/{MaxHealth} | AC: {ArmorClass}");
+    }
 
 }
