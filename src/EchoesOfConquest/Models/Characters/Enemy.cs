@@ -39,6 +39,11 @@ public class Enemy
         Health -= damage;
     }
 
+    public Item DropLoot()
+    {
+        return _loot;
+    }
+
     private int GetModifier(int score)
     {
         return (score - 10) / 2;
