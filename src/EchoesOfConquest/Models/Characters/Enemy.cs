@@ -2,30 +2,27 @@ namespace EchoesOfConquest.Models;
 
 public class Enemy
 {
-    public string Name { get; set; }
-    public int Health { get; set; }
-    public int MaxHealth { get; set; }
-    public int Damage { get; set; }
+    public string Name { get; private set; }
+    public int Health { get; private set; }
+    public int ArmorClass { get; }
+    public bool IsAlive => Health > 0;
 
-    public Enemy(string name, int health, int maxHealth, int damage)
+    private int _attackBonus;
+    private int _damageSides;
+    private int _maxHealth;
+    private Item _loot;
+
+    public Enemy(string name, int health, int attackBonus,
+        int damageSides, int armorClass, Item loot = null)
     {
         Name = name;
-        Health = health;
-        MaxHealth = maxHealth;
-        Damage = damage;
+        Health = _maxHealth = health;
+        ArmorClass = armorClass;
+        _attackBonus = attackBonus;
+        _damageSides = damageSides;
+        _loot = loot;
     }
 
-    public void Attack(Player player)
-    {
-        if (player.Health <= Damage)
-        {
-            player.Health = 0;
-            Console.WriteLine($"{player.Name} has been slain. You lost!");
-            return;
-        }
 
-        player.Health -= Damage;
-        Console.WriteLine($"{player.Name} has been hit! HP left: {player.Health}");
 
-    }
 }
