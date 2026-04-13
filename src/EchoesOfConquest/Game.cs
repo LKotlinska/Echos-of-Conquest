@@ -83,8 +83,9 @@ public class Game
 
         while (player.IsAlive && enemy.IsAlive)
         {
-            player.GetStatus();
-            enemy.GetStatus();
+            player.DisplayHealthBar();
+            Console.WriteLine();
+            enemy.DisplayHealthBar();
 
             Console.WriteLine("[A]ttack | [I]tem");
             var choice = Console.ReadLine().ToUpper();

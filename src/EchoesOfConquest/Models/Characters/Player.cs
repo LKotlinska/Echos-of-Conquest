@@ -109,9 +109,31 @@ public class Player
     {
         return (score - 10) / 2;
     }
-    public void GetStatus()
+
+    public void DisplayHealthBar()
     {
-        Console.WriteLine($"{Name} ({PlayerClass.Name}) — HP: {Health}/{MaxHealth} | AC: {ArmorClass}");
+        int barWidth = 30;
+        int filledWidth = (int)((double)Health / MaxHealth * barWidth);
+        int emptyWidth = barWidth - filledWidth;
+
+        ConsoleColor barColor = GetHealthColor();
+        ConsoleColor original = Console.ForegroundColor;
+        
+        Console.Write($"{Name,-13} [");
+        Console.ForegroundColor = barColor;
+        Console.Write(new string('█', filledWidth));
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write(new string('░', emptyWidth));
+        Console.ForegroundColor = original;
+        double pct = (double)Health / MaxHealth * 100;
+        Console.WriteLine($"] {Health}/{MaxHealth} ({pct:F0}%)");
     }
 
+    private ConsoleColor GetHealthColor()
+    {
+        double pct = (double)Health / MaxHealth;
+        return  pct > 0.6 ? ConsoleColor.Green :
+                pct > 0.3 ? ConsoleColor.Yellow :
+                ConsoleColor.Red;
+    }
 }

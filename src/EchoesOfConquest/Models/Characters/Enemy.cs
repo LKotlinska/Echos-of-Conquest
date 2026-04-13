@@ -43,9 +43,32 @@ public class Enemy
     {
         return _loot;
     }
-
-    public void GetStatus()
+    
+    public void DisplayHealthBar()
     {
-        Console.WriteLine($"{Name} - HP: {Health}/{_maxHealth} | AC: {ArmorClass}");
+        int barWidth = 30;
+        int filledWidth = (int)((double)Health / _maxHealth * barWidth);
+        int emptyWidth = barWidth - filledWidth;
+
+        ConsoleColor barColor = GetHealthColor();
+        ConsoleColor original = Console.ForegroundColor;
+        
+        Console.Write($"{Name,-13} [");
+        Console.ForegroundColor = barColor;
+        Console.Write(new string('█', filledWidth));
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write(new string('░', emptyWidth));
+        Console.ForegroundColor = original;
+        double pct = (double)Health / _maxHealth * 100;
+        Console.WriteLine($"] {Health}/{_maxHealth} ({pct:F0}%)");
     }
+
+    private ConsoleColor GetHealthColor()
+    {
+        double pct = (double)Health / _maxHealth;
+        return  pct > 0.6 ? ConsoleColor.Green :
+            pct > 0.3 ? ConsoleColor.Yellow :
+            ConsoleColor.Red;
+    }
+    
 }
