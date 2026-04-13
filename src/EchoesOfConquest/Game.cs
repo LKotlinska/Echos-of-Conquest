@@ -1,4 +1,5 @@
 ﻿namespace EchoesOfConquest;
+
 using EchoesOfConquest.Models;
 public class Game
 {
@@ -7,18 +8,32 @@ public class Game
     private List<Enemy> _enemies;
 
 
+    public void StartGame()
+    {
+        _player = CharacterCreation();
+        _enemies = EnemyCreation();
+
+        _player.AddToInventory(new HealthPotion("Potion", 30));
+        _player.AddToInventory(new HealthPotion("da", 30));
+        _player.AddToInventory(new HealthPotion("Potisdasdon", 30));
+
+        foreach (var enemy in _enemies)
+        {
+            StartCombat(_player, enemy);
+        }
+    }
 
     private Player CharacterCreation()
     {
         Console.Write("Enter your name: ");
         var name = Console.ReadLine();
-        
+
         Console.WriteLine("Choose your class: \n" +
                           "[1] Fighter\n" +
-                          "[2] Rogue" +
+                          "[2] Rogue\n" +
                           "[3] Wizard");
         var choice = Console.ReadLine();
-        
+
         switch (choice)
         {
             case "1":
@@ -34,14 +49,14 @@ public class Game
                 playerClass = new Fighter();
                 break;
         }
-        
-        Console.WriteLine($"Welcome {name} the {playerClass.Name}");
+
+        Console.WriteLine($"Welcome to the Echoes of Conquest, {name} the {playerClass.Name}!");
         return new Player(name, playerClass);
     }
 
     private List<Enemy> EnemyCreation()
     {
-        _enemies = new List<Enemy>();
+        List<Enemy> enemies = new List<Enemy>();
 
         HealthPotion smallPotion = new HealthPotion("Small Potion", 15);
         Enemy goblin = new Enemy("Goblin", 30, 2, 4, 10, smallPotion);
@@ -57,20 +72,73 @@ public class Game
 
         Weapon rapiers = new Weapon("Rapiers", 7, "Rogue");
         Enemy dragon = new Enemy("Dragon", 100, 7, 10, 15, rapiers);
-        
-        _enemies.AddRange(new List<Enemy>() {goblin, orc, skeleton, darkMage, dragon});
-        return _enemies;
+
+        enemies.AddRange(new List<Enemy>() { goblin, orc, skeleton, darkMage, dragon });
+        return enemies;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+    private bool StartCombat(Player player, Enemy enemy)
+    {
+        Console.WriteLine($"**** {enemy.Name} appears! ****");
+
+        while (player.IsAlive && enemy.IsAlive)
+        {
+            player.GetStatus();
+            enemy.GetStatus();
+
+            Console.WriteLine("[A]ttack | [I]tem");
+            var choice = Console.ReadLine().ToUpper();
+
+            switch (choice)
+            {
+                case "A":
+                    if (player.RollToHit(enemy.ArmorClass))
+                    {
+                        int dmg = player.RollDamage();
+                        enemy.TakeDamage(dmg);
+                        Console.WriteLine($"You hit {enemy.Name} for {dmg} damage!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Yikes! You missed.");
+                    }
+                    break;
+                case "I":
+                    player.ShowInventory();
+                    Console.Write("Enter item number to use or [Enter] to cancel: ");
+                    if (int.TryParse(Console.ReadLine(), out int i))
+                    {
+                        player.UseItem(i);
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Invalid input, try again.");
+                    continue;
+            }
+
+            if (enemy.IsAlive == false)
+            {
+                break;
+            }
+
+            if (enemy.RollToHit(player.ArmorClass))
+            {
+                int dmg = enemy.RollDamage();
+                player.TakeDamage(dmg);
+                Console.WriteLine($"{enemy.Name} hits your for {dmg} damage!");
+            }
+            else
+            {
+                Console.WriteLine($"{enemy.Name} misses!");
+            }
+        }
+
+        if (enemy.IsAlive == false)
+        {
+            Console.WriteLine($"\nYou defeated the {enemy.Name}!");
+        }
+
+        return player.IsAlive;
+    }
 }
+
