@@ -51,11 +51,22 @@ public class Player
         _inventory.Add(item);
     }
 
+    public void ShowInventory()
+    {
+        if (_inventory.Count == 0)
+        {
+            Console.WriteLine("Inventory is empty.");
+        }
+        for (int i = 0; i < _inventory.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {_inventory[i].GetInfo()}");
+        }
+    }
+
     private int GetModifier(int score)
     {
         return (score - 10) / 2;
     }
-
     public void GetStatus()
     {
         Console.WriteLine($"{Name} ({PlayerClass.Name}) — HP: {Health}/{MaxHealth} | AC: {ArmorClass}");
