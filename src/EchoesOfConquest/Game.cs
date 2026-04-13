@@ -1,74 +1,55 @@
-﻿using EchoesOfConquest.Models;
-
-var gameOver = false;
-var healthPotion = new HealthPotion();
-Console.WriteLine();
-var enemy = new Enemy("Goblin", 80, 80, 12);
-
-Console.WriteLine("Welcome to *** Echoes Of Conquest ***");
-
-Console.Write("Enter your name: ");
-var player = new Player(Console.ReadLine());
-Console.Clear();
-Console.WriteLine($"{player.Name} (HP: {player.Health}) vs {enemy.Name} (HP: {enemy.Health})");
-
-while (!gameOver)
+﻿namespace EchoesOfConquest;
+using EchoesOfConquest.Models;
+public class Game
 {
-    Console.WriteLine("Choose your action:\n" +
-                      "1. Attack\n" +
-                      "2. Use Health Potion\n" +
-                      "3. Check health\n" +
-                      "4. Check inventory\n" +
-                      "5. Buy Health Potion"
-                      
-                      );
-    
-    var action = Console.ReadLine();
-    
-    switch (action)
-    {
-        case "1":
-            Console.Clear();
-            player.Attack(enemy);
-            
-            if (enemy.Health == 0)
-            {
-                Console.WriteLine("Game Over!");
-                return;
-            }
-            enemy.Attack(player);
-            break;
-        case "2":
-            Console.Clear();
-            healthPotion.Use(player);
-            // MUST SUBTRACT POTIONS FROM INVENTORY
-            // CANNOT HEAL MORE THAN MAXHEALTH
-            break;
-        case "3":
-            Console.Clear();
-            Console.WriteLine($"{player.Name} has {player.Health} health left.");
-            break;
-        case "4":
-            Console.Clear();
-            if (player.Inventory.Count < 1)
-            {
-                Console.WriteLine("You don't have any items in your inventory.");
-                break;
-            }
-            foreach (var item in player.Inventory)
-            {
-                Console.WriteLine("Inventory item: " + item.Name);
-            }
+    private Player _player;
+    private PlayerClass playerClass;
+    private List<Enemy> _enemies;
 
-            break;
-        case "5":
-            Console.Clear();
-            player.AddToInventory(healthPotion);
-            Console.WriteLine($"{healthPotion.Name} has been added to your inventory");
-            break;
-        case "6": 
-            Console.Clear();
-            DiceRoller.
-            
+
+
+    private Player CharacterCreation()
+    {
+        Console.Write("Enter your name: ");
+        var name = Console.ReadLine();
+        
+        Console.WriteLine("Choose your class: \n" +
+                          "[1] Fighter\n" +
+                          "[2] Rogue" +
+                          "[3] Wizard");
+        var choice = Console.ReadLine();
+        
+        switch (choice)
+        {
+            case "1":
+                playerClass = new Fighter();
+                break;
+            case "2":
+                playerClass = new Rogue();
+                break;
+            case "3":
+                playerClass = new Wizard();
+                break;
+            default:
+                playerClass = new Fighter();
+                break;
+        }
+        
+        Console.WriteLine($"Welcome {name} the {playerClass.Name}");
+        return new Player(name, playerClass);
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
