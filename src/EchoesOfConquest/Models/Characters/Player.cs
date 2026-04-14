@@ -91,7 +91,7 @@ public class Player
     public void AddGold(int amount)
     {
         Gold += amount;
-        Console.WriteLine($"You received {amount} gold! (Total: {Gold})");
+        Console.WriteLine($"  You received {amount} gold! (Total: {Gold})");
     }
 
     public void ShowInventory()
@@ -145,13 +145,34 @@ public class Player
         int strMod = GetModifier(_strength);
         string strModStr = strMod >= 0 ? $"+{strMod}" : $"{strMod}";
 
-        Console.WriteLine($"  ║ {Name.ToUpper()}");
-        Console.WriteLine($"  ║ {PlayerClass.Name.ToUpper()}");
-        Console.WriteLine($"  ╠══ HP  {Health}/{MaxHealth}");
-        Console.WriteLine($"  ╠══ STR {_strength} ({strModStr})  AC {ArmorClass}");
-        Console.WriteLine($"  ╠══ Weapon: {weaponName} (d{weaponDie})");
-        Console.WriteLine($"  ╠══ Gold: {Gold}");
+        const int w = 32;
+        const int inner = w - 2;
+        string top = "  ╔" + new string('═', w) + "╗";
+        string mid = "  ╠" + new string('═', w) + "╣";
+        string bottom = "  ╚" + new string('═', w) + "╝";
 
+        static string Row(string label, string value, int width)
+        {
+            string cell = $"  {label,-8}{value}";
+            return "  ║ " + cell.PadRight(width) + " ║";
+        }
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine();
+        Console.WriteLine(top);
+        Console.WriteLine($"  ║  {Name.ToUpper(),-inner}║");
+        Console.WriteLine($"  ║  {PlayerClass.Name,-inner}║");
+        Console.WriteLine(mid);
+        Console.ResetColor();
+        Console.WriteLine(Row("HP", $"{Health} / {MaxHealth}", w - 2));
+        Console.WriteLine(Row("STR", $"{_strength} ({strModStr})", w - 2));
+        Console.WriteLine(Row("AC", $"{ArmorClass}", w - 2));
+        Console.WriteLine(Row("Weapon", $"{weaponName}  (d{weaponDie})", w - 2));
+        Console.WriteLine(Row("Gold", $"{Gold}", w - 2));
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine(bottom);
+        Console.ResetColor();
+        Console.WriteLine();
     }
 
     public void DisplayHealthBar()

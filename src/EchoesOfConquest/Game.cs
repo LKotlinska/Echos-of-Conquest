@@ -5,54 +5,16 @@ using EchoesOfConquest.Models;
 public class Game
 {
     private Player _player;
-    private PlayerClass playerClass;
     private Queue<Enemy> _enemies;
     private Shop _shop;
-
-    private readonly string[] _playerMissMessages =
-    {
-        "Your swing cuts through nothing but air!",
-        "You lunge forward, but your opponent sidesteps with ease.",
-        "Your weapon glances off their armor harmlessly.",
-        "You stumble mid-swing — embarrassing, but survivable.",
-        "A wild slash! You hit absolutely nothing.",
-        "You overcommit and whiff completely.",
-        "Your attack was telegraphed — they saw it coming a mile away.",
-        "You strike with conviction... at the empty space beside them.",
-        "Your blade finds only shadow where your foe once stood.",
-        "A clumsy swing. Even the rats aren't impressed."
-    };
-
-    private readonly string[] _enemyMissMessages =
-    {
-        "{0} lunges at you, but you dodge just in time!",
-        "{0} swings wildly and misses by a hair!",
-        "{0} strikes at your chest, but your armor deflects the blow.",
-        "{0} trips over its own feet mid-attack!",
-        "{0} snarls and slashes — but you're already out of reach.",
-        "You duck under {0}'s clumsy strike with room to spare.",
-        "{0} hurls an attack that sails past your ear. Close one!",
-        "{0} winds up a massive blow... and completely whiffs.",
-        "You parry {0}'s strike and shove them back.",
-        "{0} snaps at you but bites nothing but dust."
-    };
-
-    private readonly Random _random = new();
+    private readonly CombatEngine _combat = new();
 
     public void StartGame()
     {
-        ShowTitleScreen();
-        _player = CharacterCreation();
-        _enemies = EnemyCreation();
-
-        _shop = new Shop(new List<Item>
-        {
-            new HealthPotion("Small Potion", 20, 15),
-            new HealthPotion("Large Potion", 40, 30),
-            new Weapon("Battleaxe", 60, 10, "Fighter"),
-            new Weapon("Shortsword", 45, 8, "Rogue"),
-            new Weapon("Arcane Staff", 50, 9, "Wizard"),
-        });
+        TitleScreen.Show();
+        _player = CharacterCreation.Create();
+        _enemies = WorldData.CreateEnemies();
+        _shop = WorldData.CreateShop();
 
         bool quit = false;
         while (!quit && _player.IsAlive && _enemies.Count > 0)
@@ -71,23 +33,16 @@ public class Game
                     {
                         _player.ShowInventory();
                         Console.WriteLine("[B]ack");
-
                         var itemInput = Console.ReadLine()?.ToUpper() ?? "";
-
-                        if (itemInput == "B")
-                        {
-                            break;
-                        }
-                        else if (int.TryParse(itemInput, out int itemChoice))
-                        {
+                        if (itemInput == "B") break;
+                        if (int.TryParse(itemInput, out int itemChoice))
                             _player.UseItem(itemChoice);
-                        }
                     }
                     break;
 
                 case "F":
                     var enemy = _enemies.Dequeue();
-                    bool survived = StartCombat(_player, enemy);
+                    bool survived = _combat.StartCombat(_player, enemy);
 
                     if (survived)
                     {
@@ -95,7 +50,7 @@ public class Game
                         if (loot != null)
                         {
                             _player.AddToInventory(loot);
-                            Console.WriteLine($"{enemy.Name} dropped {loot.Name}!");
+                            Console.WriteLine($"  {enemy.Name} dropped {loot.Name}!");
                         }
                         _player.AddGold(enemy.DropGold());
 
@@ -117,238 +72,12 @@ public class Game
                 case "Q":
                     Console.Write("You are about to kill your character, are you sure? [Y/N]: ");
                     if (Console.ReadLine()?.ToUpper() == "Y")
-                    {
                         quit = true;
-                    }
                     break;
             }
         }
 
         if (!_player.IsAlive)
             Console.WriteLine("You have fallen in battle... Game Over.");
-    }
-
-    private Player CharacterCreation()
-    {
-        string? name;
-        do
-        {
-            Console.Write("Enter your name: ");
-            name = Console.ReadLine()?.Trim();
-        } while (string.IsNullOrEmpty(name));
-
-        var classes = new PlayerClass[] { new Fighter(), new Rogue(), new Wizard() };
-
-        Console.WriteLine("\nChoose your class:\n");
-        for (int i = 0; i < classes.Length; i++)
-        {
-            var type = classes[i];
-            var weapon = type.StartingWeapon;
-            Console.WriteLine($"[{i + 1}] {type.Name} — {type.Description}");
-            Console.WriteLine($"    HP: {type.MaxHealth}  |  STR: {type.Strength}  |  AC: {type.ArmorClass}  |  Weapon: {weapon.Name} (d{weapon.DamageSides})");
-            Console.WriteLine();
-        }
-
-        Console.Write("Your choice: ");
-        var choice = Console.ReadLine();
-
-        switch (choice)
-        {
-            case "1":
-                playerClass = new Fighter();
-                break;
-            case "2":
-                playerClass = new Rogue();
-                break;
-            case "3":
-                playerClass = new Wizard();
-                break;
-            default:
-                playerClass = new Fighter();
-                break;
-        }
-
-        Console.Clear();
-        Console.WriteLine($"Welcome to the Echoes of Conquest, {name} the {playerClass.Name}!");
-        return new Player(name, playerClass);
-    }
-
-    private Queue<Enemy> EnemyCreation()
-    {
-        HealthPotion smallPotion = new HealthPotion("Small Potion", 20, 15);
-        Enemy goblin = new Enemy("Goblin", 40, 2, 4, 10, 10, smallPotion);
-
-        Weapon axe = new Weapon("Axe", 30, 8);
-        Enemy orc = new Enemy("Orc", 50, 4, 6, 14, 20, axe);
-
-        HealthPotion largePotion = new HealthPotion("Large Potion", 40, 30);
-        Enemy skeleton = new Enemy("Skeleton", 60, 3, 6, 13, 25, largePotion);
-
-        Weapon magicStaff = new Weapon("Magic Staff", 50, 6, "Wizard");
-        Enemy darkMage = new Enemy("Dark Mage", 60, 6, 10, 10, 40, magicStaff);
-
-        Weapon rapiers = new Weapon("Rapiers", 40, 7, "Rogue");
-        Enemy dragon = new Enemy("Dragon", 100, 8, 12, 20, 100, rapiers);
-
-        return new Queue<Enemy>(new[] { goblin, orc, skeleton, darkMage, dragon });
-    }
-
-    private bool StartCombat(Player player, Enemy enemy)
-    {
-        Console.Clear();
-        Console.WriteLine();
-        WriteCombatBanner($" {enemy.Name.ToUpper()} APPEARS! ");
-        Console.WriteLine();
-
-        List<(string message, ConsoleColor color)> combatLog = [];
-
-        while (player.IsAlive && enemy.IsAlive)
-        {
-            Console.Clear();
-            Console.WriteLine();
-            WriteSectionLine();
-            player.DisplayHealthBar();
-            Console.WriteLine();
-            enemy.DisplayHealthBar();
-            WriteSectionLine();
-            Console.WriteLine();
-
-            var recent = combatLog.TakeLast(4).ToList();
-            foreach (var (msg, color) in recent)
-            {
-                Console.ForegroundColor = color;
-                Console.WriteLine($"  {msg}");
-            }
-            for (int pad = recent.Count; pad < 4; pad++)
-                Console.WriteLine();
-            Console.ResetColor();
-
-            WriteSectionLine();
-            Console.WriteLine("  [A]ttack | [I]tem");
-            Console.Write("  > ");
-            var choice = Console.ReadLine()?.ToUpper() ?? "";
-
-            switch (choice)
-            {
-                case "A":
-                    if (player.RollToHit(enemy.ArmorClass))
-                    {
-                        int dmg = player.RollDamage();
-                        enemy.TakeDamage(dmg);
-                        combatLog.Add(($"You hit {enemy.Name} for {dmg} damage!", ConsoleColor.Green));
-                    }
-                    else
-                    {
-                        combatLog.Add((_playerMissMessages[_random.Next(_playerMissMessages.Length)], ConsoleColor.DarkYellow));
-                    }
-                    break;
-                case "I":
-                    player.ShowInventory();
-                    Console.WriteLine("  [B]ack");
-                    var combatItemInput = Console.ReadLine()?.ToUpper() ?? "";
-                    if (combatItemInput != "B" && int.TryParse(combatItemInput, out int idx))
-                        player.UseItem(idx);
-                    break;
-                default:
-                    combatLog.Add(("Invalid input — try again.", ConsoleColor.DarkGray));
-                    continue;
-            }
-
-            if (!enemy.IsAlive) break;
-
-            if (enemy.RollToHit(player.ArmorClass))
-            {
-                int dmg = enemy.RollDamage();
-                player.TakeDamage(dmg);
-                combatLog.Add(($"{enemy.Name} hits you for {dmg} damage!", ConsoleColor.Red));
-            }
-            else
-            {
-                combatLog.Add((string.Format(_enemyMissMessages[_random.Next(_enemyMissMessages.Length)], enemy.Name), ConsoleColor.DarkGray));
-            }
-        }
-
-        // Final screen showing last events and outcome
-        Console.Clear();
-        Console.WriteLine();
-        WriteSectionLine();
-        player.DisplayHealthBar();
-        Console.WriteLine();
-        enemy.DisplayHealthBar();
-        WriteSectionLine();
-        Console.WriteLine();
-
-        foreach (var (msg, color) in combatLog.TakeLast(4))
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine($"  {msg}");
-        }
-        Console.ResetColor();
-        Console.WriteLine();
-        WriteSectionLine();
-
-        if (!enemy.IsAlive)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"\n  *** You defeated the {enemy.Name}! ***\n");
-            Console.ResetColor();
-        }
-
-        return player.IsAlive;
-    }
-
-    private static void WriteSectionLine()
-    {
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.WriteLine("  " + new string('─', 50));
-        Console.ResetColor();
-    }
-
-    private static void WriteCombatBanner(string text)
-    {
-        int innerWidth = Math.Max(text.Length, 32);
-        if ((innerWidth - text.Length) % 2 != 0) innerWidth++;
-        int padding = (innerWidth - text.Length) / 2;
-        string paddedText = new string(' ', padding) + text + new string(' ', padding);
-        string border = new string('═', innerWidth);
-
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine($"  ╔{border}╗");
-        Console.WriteLine($"  ║{paddedText}║");
-        Console.WriteLine($"  ╚{border}╝");
-        Console.ResetColor();
-    }
-
-    private static void ShowTitleScreen()
-    {
-        string[] title = [
-            "  ▄▄▄▄▄▄▄                                        ▄▄   ▄   ▄▄▄▄",
-            " █▀██▀▀▀        █▄                              ██    ▀██████▀                                     █▄",
-            "   ██           ██                             ▄██▄     ██           ▄                            ▄██▄",
-            "   ████   ▄███▀ ████▄ ▄███▄ ▄█▀█▄ ▄██▀█   ▄███▄ ██      ██     ▄███▄ ████▄ ▄████ ██ ██ ▄█▀█▄ ▄██▀█ ██",
-            "   ██     ██    ██ ██ ██ ██ ██▄█▀ ▀███▄   ██ ██ ██      ██     ██ ██ ██ ██ ██ ██ ██ ██ ██▄█▀ ▀███▄ ██",
-            "   ▀█████▄▀███▄▄██ ██▄▀███▀▄▀█▄▄▄█▄▄██▀  ▄▀███▀▄██      ▀█████▄▀███▀▄██ ▀█▄▀████▄▀██▀█▄▀█▄▄▄█▄▄██▀▄██",
-            "                                                ██                            ██",
-            "                                               ▀▀                              ▀",
-        ];
-        string[] tagline = [
-            "┌─╴┌─┐┌─┐┌─╴┌─╴   ╷ ╷┌─┐╷ ╷┌─┐   ╷  ┌─╴┌─╴┌─╴┌┐╷╶┬┐",
-            "├╴ │ │├┬┘│╶┐├╴    └┬┘│ ││ │├┬┘   │  ├╴ │╶┐├╴ │└┤ ││",
-            "╵  └─┘╵└╴└─┘└─╴    ╵ └─┘└─┘╵└╴   └─╴└─╴└─┘└─╴╵ ╵╶┴┘",
-        ];
-        string[] prompt = [
-            "┌─┐┌─┐┌─╴┌─┐┌─┐   ┌─╴┌┐╷╶┬╴┌─╴┌─┐   ╶┬╴┌─┐   ┌┐ ┌─╴┌─╴╷┌┐╷",
-            "├─┘├┬┘├╴ └─┐└─┐   ├╴ │└┤ │ ├╴ ├┬┘    │ │ │   ├┴┐├╴ │╶┐││└┤",
-            "╵  ╵└╴└─╴└─┘└─┘   └─╴╵ ╵ ╵ └─╴╵└╴    ╵ └─┘   └─┘└─╴└─┘╵╵ ╵╵╵╵",
-        ];
-
-        Console.Clear();
-        Console.WriteLine();
-        foreach (var line in title) Console.WriteLine(line);
-        Console.WriteLine();
-        foreach (var line in tagline) Console.WriteLine(line);
-        Console.WriteLine();
-        foreach (var line in prompt) Console.WriteLine(line);
-        Console.ReadLine();
     }
 }
