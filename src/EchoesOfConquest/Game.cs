@@ -36,12 +36,21 @@ public class Game
                     break;
 
                 case "I":
-                    _player.ShowInventory();
-                    if (_player.GetInventory().Count > 0)
+                    while (true)
                     {
-                        Console.Write("Enter item number to use or [Enter] to cancel: ");
-                        if (int.TryParse(Console.ReadLine(), out int itemChoice))
+                        _player.ShowInventory();
+                        Console.WriteLine("[B]ack");
+
+                        var itemInput = Console.ReadLine()?.ToUpper() ?? "";
+
+                        if (itemInput == "B")
+                        {
+                            break;
+                        }
+                        else if (int.TryParse(itemInput, out int itemChoice))
+                        {
                             _player.UseItem(itemChoice);
+                        }
                     }
                     break;
 
@@ -73,7 +82,9 @@ public class Game
                 case "Q":
                     Console.Write("You are about to kill your character, are you sure? [Y/N]: ");
                     if (Console.ReadLine()?.ToUpper() == "Y")
+                    {
                         quit = true;
+                    }
                     break;
             }
         }
@@ -166,8 +177,9 @@ public class Game
                     break;
                 case "I":
                     player.ShowInventory();
-                    Console.Write("Enter item number to use or [Enter] to cancel: ");
-                    if (int.TryParse(Console.ReadLine(), out int i))
+                    Console.WriteLine("[B]ack");
+                    var combatItemInput = Console.ReadLine()?.ToUpper() ?? "";
+                    if (combatItemInput != "B" && int.TryParse(combatItemInput, out int i))
                     {
                         player.UseItem(i);
                     }
