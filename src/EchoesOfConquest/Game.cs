@@ -27,7 +27,7 @@ public class Game
         bool quit = false;
         while (!quit && _player.IsAlive && _enemies.Count > 0)
         {
-            Console.WriteLine($"\n[S]hop | [I]nventory | [F]ight ({_enemies.Count} enemies remaining) | [Q]uit");
+            Console.WriteLine($"\n[S]hop | [I]nventory | [F]ight ({_enemies.Count} enemies remaining) | [C]haracter | [Q]uit");
             var choice = Console.ReadLine()?.ToUpper() ?? "";
 
             switch (choice)
@@ -78,6 +78,10 @@ public class Game
                         Console.Write("Do you want to continue? [Y/N]: ");
                         Console.ReadLine();
                     }
+                    break;
+
+                case "C":
+                    _player.ShowCharacterSheet();
                     break;
 
                 case "Q":
@@ -134,6 +138,7 @@ public class Game
                 break;
         }
 
+        Console.Clear();
         Console.WriteLine($"Welcome to the Echoes of Conquest, {name} the {playerClass.Name}!");
         return new Player(name, playerClass);
     }
@@ -244,11 +249,11 @@ public class Game
 
         Console.Clear();
         Console.WriteLine();
-        foreach (var line in title)   Console.WriteLine(line);
+        foreach (var line in title) Console.WriteLine(line);
         Console.WriteLine();
         foreach (var line in tagline) Console.WriteLine(line);
         Console.WriteLine();
-        foreach (var line in prompt)  Console.WriteLine(line);
+        foreach (var line in prompt) Console.WriteLine(line);
         Console.ReadLine();
     }
 }
