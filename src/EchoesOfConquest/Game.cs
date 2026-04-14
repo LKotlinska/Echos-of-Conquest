@@ -102,10 +102,19 @@ public class Game
             name = Console.ReadLine()?.Trim();
         } while (string.IsNullOrEmpty(name));
 
-        Console.WriteLine("Choose your class: \n" +
-                          "[1] Fighter\n" +
-                          "[2] Rogue\n" +
-                          "[3] Wizard");
+        var classes = new PlayerClass[] { new Fighter(), new Rogue(), new Wizard() };
+
+        Console.WriteLine("\nChoose your class:\n");
+        for (int i = 0; i < classes.Length; i++)
+        {
+            var type = classes[i];
+            var weapon = type.StartingWeapon;
+            Console.WriteLine($"[{i + 1}] {type.Name} — {type.Description}");
+            Console.WriteLine($"    HP: {type.MaxHealth}  |  STR: {type.Strength}  |  AC: {type.ArmorClass}  |  Weapon: {weapon.Name} (d{weapon.DamageSides})");
+            Console.WriteLine();
+        }
+
+        Console.Write("Your choice: ");
         var choice = Console.ReadLine();
 
         switch (choice)

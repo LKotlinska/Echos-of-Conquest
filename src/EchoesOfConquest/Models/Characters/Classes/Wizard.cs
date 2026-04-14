@@ -3,6 +3,7 @@ namespace EchoesOfConquest.Models;
 public class Wizard : PlayerClass
 {
     public override string Name => "Wizard";
+    public override string Description => "Frail of body, but commands arcane forces beyond reckoning.";
     public override int MaxHealth => 70;
     public override int Strength => 10;
     public override int ArmorClass => 12;
