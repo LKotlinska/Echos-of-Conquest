@@ -41,11 +41,14 @@ public class Game
                     break;
 
                 case "F":
-                    var enemy = _enemies.Dequeue();
-                    bool survived = _combat.StartCombat(_player, enemy);
-
-                    if (survived)
+                    bool keepFighting = true;
+                    while (keepFighting && _player.IsAlive && _enemies.Count > 0)
                     {
+                        var enemy = _enemies.Dequeue();
+                        bool survived = _combat.StartCombat(_player, enemy);
+
+                        if (!survived) break;
+
                         var loot = enemy.DropLoot();
                         if (loot != null)
                         {
@@ -61,7 +64,8 @@ public class Game
                         }
 
                         Console.Write("Do you want to continue? [Y/N]: ");
-                        Console.ReadLine();
+                        string continueChoice = Console.ReadLine()?.ToUpper() ?? "";
+                        keepFighting = continueChoice == "Y";
                     }
                     break;
 
