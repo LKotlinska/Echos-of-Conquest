@@ -69,6 +69,26 @@ public class Player
         _inventory.Add(item);
     }
 
+    public List<Item> GetInventory()
+    {
+        return _inventory;
+    }
+
+    public void RemoveFromInventory(int index)
+    {
+        _inventory.RemoveAt(index);
+    }
+
+    public bool SpendGold(int amount)
+    {
+        if (Gold < amount)
+        {
+            return false;
+        }
+        Gold -= amount;
+        return true;
+    }
+
     public void AddGold(int amount)
     {
         Gold += amount;
