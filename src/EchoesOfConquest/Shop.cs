@@ -26,7 +26,7 @@ public class Shop
             var input = Console.ReadLine().ToUpper();
             if (input == "B") break;
             
-            if (int.TryParse(input, out int choice))
+            if (int.TryParse(input, out int choice) && choice >= 1 && choice <= _itemsForSale.Count)
             {
                 var item = _itemsForSale[choice - 1];
                 if (player.SpendGold(item.BuyPrice))

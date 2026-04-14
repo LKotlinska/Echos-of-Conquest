@@ -74,8 +74,12 @@ public class Game
 
     private Player CharacterCreation()
     {
-        Console.Write("Enter your name: ");
-        var name = Console.ReadLine();
+        string? name;
+        do
+        {
+            Console.Write("Enter your name: ");
+            name = Console.ReadLine()?.Trim();
+        } while (string.IsNullOrEmpty(name));
 
         Console.WriteLine("Choose your class: \n" +
                           "[1] Fighter\n" +
@@ -134,7 +138,7 @@ public class Game
             enemy.DisplayHealthBar();
 
             Console.WriteLine("[A]ttack | [I]tem");
-            var choice = Console.ReadLine().ToUpper();
+            var choice = Console.ReadLine()?.ToUpper() ?? "";
 
             switch (choice)
             {

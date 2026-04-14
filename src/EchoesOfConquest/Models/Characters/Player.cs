@@ -110,7 +110,7 @@ public class Player
 
     public void UseItem(int choice)
     {
-        if (choice < 1)
+        if (choice < 1 || choice > _inventory.Count)
         {
             return;
         }
