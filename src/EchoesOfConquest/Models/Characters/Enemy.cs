@@ -10,19 +10,20 @@ public class Enemy
     private int _attackBonus;
     private int _damageSides;
     private int _maxHealth;
+    private int _goldDrop;
     private Item _loot;
 
     public Enemy(string name, int health, int attackBonus,
-        int damageSides, int armorClass, Item loot = null)
+        int damageSides, int armorClass, int goldDrop, Item loot = null)
     {
         Name = name;
         Health = _maxHealth = health;
         ArmorClass = armorClass;
+        _goldDrop = goldDrop;
         _attackBonus = attackBonus;
         _damageSides = damageSides;
         _loot = loot;
     }
-
 
     public bool RollToHit(int targetArmor)
     {
@@ -43,6 +44,11 @@ public class Enemy
     {
         return _loot;
     }
+
+    public int DropGold()
+    {
+        return _goldDrop;
+    } 
     
     public void DisplayHealthBar()
     {

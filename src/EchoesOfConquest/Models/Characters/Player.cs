@@ -8,6 +8,7 @@ public class Player
     public int MaxHealth { get; set; }
     public int ArmorClass { get; set; }
     public bool IsAlive => Health > 0;
+    public int Gold { get; set; }
 
 
     private int _strength;
@@ -15,9 +16,10 @@ public class Player
     private Weapon? _equippedWeapon;
     private List<Item> _inventory = new();
 
-    public Player(string name, PlayerClass playerClass)
+    public Player(string name, PlayerClass playerClass, int gold = 50)
     {
         Name = name;
+        Gold = gold;
         PlayerClass = playerClass;
         MaxHealth = playerClass.MaxHealth;
         Health = playerClass.MaxHealth;
@@ -61,20 +63,16 @@ public class Player
             Health = MaxHealth;
         }
     }
-    public void Defend()
-    {
-        _isDefending = true;
-        Console.WriteLine($"{Name} takes a defensive stance (damage halved this turn)!");
-    }
-
-    public void ResetDefend()
-    {
-        _isDefending = false;
-    }
 
     public void AddToInventory(Item item)
     {
         _inventory.Add(item);
+    }
+
+    public void AddGold(int amount)
+    {
+        Gold += amount;
+        Console.WriteLine($"You received {amount} gold! (Total: {Gold})");
     }
 
     public void ShowInventory()
@@ -122,7 +120,7 @@ public class Player
 
         ConsoleColor barColor = GetHealthColor();
         ConsoleColor original = Console.ForegroundColor;
-        
+
         Console.Write($"{Name,-13} [");
         Console.ForegroundColor = barColor;
         Console.Write(new string('█', filledWidth));
@@ -136,8 +134,19 @@ public class Player
     private ConsoleColor GetHealthColor()
     {
         double pct = (double)Health / MaxHealth;
-        return  pct > 0.6 ? ConsoleColor.Green :
+        return pct > 0.6 ? ConsoleColor.Green :
                 pct > 0.3 ? ConsoleColor.Yellow :
                 ConsoleColor.Red;
+    }
+
+    public void Defend()
+    {
+        _isDefending = true;
+        Console.WriteLine($"{Name} takes a defensive stance (damage halved this turn)!");
+    }
+
+    public void ResetDefend()
+    {
+        _isDefending = false;
     }
 }
