@@ -13,9 +13,9 @@ public class Game
         _player = CharacterCreation();
         _enemies = EnemyCreation();
 
-        _player.AddToInventory(new HealthPotion("Potion", 30));
-        _player.AddToInventory(new HealthPotion("da", 30));
-        _player.AddToInventory(new HealthPotion("Potisdasdon", 30));
+        _player.AddToInventory(new HealthPotion("Potion", 40, 30));
+        _player.AddToInventory(new HealthPotion("da", 40, 30));
+        _player.AddToInventory(new HealthPotion("Potisdasdon", 40, 30));
 
         foreach (var enemy in _enemies)
         {
@@ -58,20 +58,20 @@ public class Game
     {
         List<Enemy> enemies = new List<Enemy>();
 
-        HealthPotion smallPotion = new HealthPotion("Small Potion", 15);
-        Enemy goblin = new Enemy("Goblin", 40, 2, 4, 10, smallPotion);
+        HealthPotion smallPotion = new HealthPotion("Small Potion", 20, 15);
+        Enemy goblin = new Enemy("Goblin", 40, 2, 4, 10, 10, smallPotion);
 
-        Weapon axe = new Weapon("Axe", 8);
-        Enemy orc = new Enemy("Orc", 50, 4, 6, 14, axe);
+        Weapon axe = new Weapon("Axe", 30, 8);
+        Enemy orc = new Enemy("Orc", 50, 4, 6, 14, 12, axe);
 
-        HealthPotion largePotion = new HealthPotion("Large Potion", 30);
-        Enemy skeleton = new Enemy("Skeleton", 60, 3, 6, 13, largePotion);
+        HealthPotion largePotion = new HealthPotion("Large Potion", 40, 30);
+        Enemy skeleton = new Enemy("Skeleton", 60, 3, 6, 13, 13, largePotion);
 
-        Weapon magicStaff = new Weapon("Magic Staff", 6, "Wizard");
-        Enemy darkMage = new Enemy("Dark Mage", 60, 6, 10, 10, magicStaff);
+        Weapon magicStaff = new Weapon("Magic Staff", 50, 6, "Wizard");
+        Enemy darkMage = new Enemy("Dark Mage", 60, 6, 10, 10, 18, magicStaff);
 
-        Weapon rapiers = new Weapon("Rapiers", 7, "Rogue");
-        Enemy dragon = new Enemy("Dragon", 100, 8, 12, 20, rapiers);
+        Weapon rapiers = new Weapon("Rapiers", 40, 7, "Rogue");
+        Enemy dragon = new Enemy("Dragon", 100, 8, 12, 20, 25, rapiers);
 
         enemies.AddRange(new List<Enemy>() { goblin, orc, skeleton, darkMage, dragon });
         return enemies;
@@ -137,6 +137,8 @@ public class Game
         if (enemy.IsAlive == false)
         {
             Console.WriteLine($"\nYou defeated the {enemy.Name}!");
+            player.AddGold(enemy.DropGold());
+            player.AddToInventory(enemy.DropLoot());
         }
 
         return player.IsAlive;

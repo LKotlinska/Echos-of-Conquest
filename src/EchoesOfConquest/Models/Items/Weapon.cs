@@ -1,12 +1,12 @@
 namespace EchoesOfConquest.Models;
 
 public class Weapon : Item
-{  
+{
     public int DamageSides { get; set; }
     public string RequiredClass { get; set; }
 
     // base() will pass arguments to the Item's constructor.
-    public Weapon(string name, int damagesides, string requiredClass = "Any", string rarity = "Common") : base(name,
+    public Weapon(string name, int buyPrice, int damagesides, string requiredClass = "Any", string rarity = "Common") : base(name, buyPrice,
         rarity)
     {
         DamageSides = damagesides;
@@ -20,6 +20,6 @@ public class Weapon : Item
 
     public override string GetInfo()
     {
-        return ($"{Name} | {Rarity} | Dice d{DamageSides} | {RequiredClass}");
+        return ($"{Name} | {Rarity} | Dice d{DamageSides} | {RequiredClass} | Buy: {BuyPrice}g | Sell: {SellPrice}g");
     }
 }
