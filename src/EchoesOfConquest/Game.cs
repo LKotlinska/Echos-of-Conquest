@@ -26,13 +26,23 @@ public class Game
         bool quit = false;
         while (!quit && _player.IsAlive && _enemies.Count > 0)
         {
-            Console.WriteLine($"\n[S]hop | [F]ight ({_enemies.Count} enemies remaining) | [Q]uit");
+            Console.WriteLine($"\n[S]hop | [I]nventory | [F]ight ({_enemies.Count} enemies remaining) | [Q]uit");
             var choice = Console.ReadLine()?.ToUpper() ?? "";
 
             switch (choice)
             {
                 case "S":
                     _shop.EnterShop(_player);
+                    break;
+
+                case "I":
+                    _player.ShowInventory();
+                    if (_player.GetInventory().Count > 0)
+                    {
+                        Console.Write("Enter item number to use or [Enter] to cancel: ");
+                        if (int.TryParse(Console.ReadLine(), out int itemChoice))
+                            _player.UseItem(itemChoice);
+                    }
                     break;
 
                 case "F":
