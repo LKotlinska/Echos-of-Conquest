@@ -123,6 +123,11 @@ public class Player
         }
         else if (_inventory[choice - 1] is Weapon weapon)
         {
+            if (weapon.RequiredClass != "Any" && weapon.RequiredClass != PlayerClass.Name)
+            {
+                Console.WriteLine($"Only a {weapon.RequiredClass} can wield the {weapon.Name}.");
+                return;
+            }
             _equippedWeapon = weapon;
             Console.WriteLine($"You equip {weapon.Name}!");
         }
@@ -130,6 +135,24 @@ public class Player
     private int GetModifier(int score)
     {
         return (score - 10) / 2;
+    }
+
+    public void ShowCharacterSheet()
+    {
+        string weaponName = _equippedWeapon?.Name ?? "Bare hands";
+        int weaponDie = _equippedWeapon?.DamageSides ?? 4;
+        int strMod = GetModifier(_strength);
+        string strModStr = strMod >= 0 ? $"+{strMod}" : $"{strMod}";
+
+        Console.WriteLine("\n  ╔══════════════════════════════╗");
+        Console.WriteLine($"  ║  {Name,-28}║");
+        Console.WriteLine($"  ║  {PlayerClass.Name,-28}║");
+        Console.WriteLine("  ╠══════════════════════════════╣");
+        Console.WriteLine($"  ╠═ HP  {Health}/{MaxHealth,-24}");
+        Console.WriteLine($"  ╠═ STR {_strength} ({strModStr})  AC {ArmorClass,-16}");
+        Console.WriteLine($"  ╠═ Weapon: {weaponName} (d{weaponDie}){new string(' ', Math.Max(0, 19 - weaponName.Length - weaponDie.ToString().Length))}");
+        Console.WriteLine($"  ╠═ Gold: {Gold,-22}║");
+        Console.WriteLine("  ╚═══════════════════════════════");
     }
 
     public void DisplayHealthBar()

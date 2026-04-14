@@ -14,21 +14,24 @@ public class Shop
     {
         Console.Clear();
         Console.WriteLine("Welcome, adventurer! What'll it be?");
+        var available = _itemsForSale
+            .Where(i => i is not Weapon w || w.RequiredClass == "Any" || w.RequiredClass == player.PlayerClass.Name)
+            .ToList();
         while (true)
         {
             Console.WriteLine($"Gold: {player.Gold}");
-            for (int i = 0; i < _itemsForSale.Count; i++)
+            for (int i = 0; i < available.Count; i++)
             {
-                Console.WriteLine($"[{i + 1}] {_itemsForSale[i].GetInfo()}");
+                Console.WriteLine($"[{i + 1}] {available[i].GetInfo()}");
             }
             Console.WriteLine("[B]ack");
-            
+
             var input = Console.ReadLine().ToUpper();
             if (input == "B") break;
-            
-            if (int.TryParse(input, out int choice) && choice >= 1 && choice <= _itemsForSale.Count)
+
+            if (int.TryParse(input, out int choice) && choice >= 1 && choice <= available.Count)
             {
-                var item = _itemsForSale[choice - 1];
+                var item = available[choice - 1];
                 if (player.SpendGold(item.BuyPrice))
                 {
                     player.AddToInventory(item);
@@ -94,5 +97,5 @@ public class Shop
             }
         }
     }
-    
+
 }
