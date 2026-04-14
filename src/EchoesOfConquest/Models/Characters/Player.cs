@@ -125,7 +125,9 @@ public class Player
         {
             if (weapon.RequiredClass != "Any" && weapon.RequiredClass != PlayerClass.Name)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Only a {weapon.RequiredClass} can wield the {weapon.Name}.");
+                Console.ResetColor();
                 return;
             }
             _equippedWeapon = weapon;

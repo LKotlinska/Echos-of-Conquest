@@ -9,6 +9,36 @@ public class Game
     private Queue<Enemy> _enemies;
     private Shop _shop;
 
+    private readonly string[] _playerMissMessages =
+    {
+        "Your swing cuts through nothing but air!",
+        "You lunge forward, but your opponent sidesteps with ease.",
+        "Your weapon glances off their armor harmlessly.",
+        "You stumble mid-swing — embarrassing, but survivable.",
+        "A wild slash! You hit absolutely nothing.",
+        "You overcommit and whiff completely.",
+        "Your attack was telegraphed — they saw it coming a mile away.",
+        "You strike with conviction... at the empty space beside them.",
+        "Your blade finds only shadow where your foe once stood.",
+        "A clumsy swing. Even the rats aren't impressed."
+    };
+
+    private readonly string[] _enemyMissMessages =
+    {
+        "{0} lunges at you, but you dodge just in time!",
+        "{0} swings wildly and misses by a hair!",
+        "{0} strikes at your chest, but your armor deflects the blow.",
+        "{0} trips over its own feet mid-attack!",
+        "{0} snarls and slashes — but you're already out of reach.",
+        "You duck under {0}'s clumsy strike with room to spare.",
+        "{0} hurls an attack that sails past your ear. Close one!",
+        "{0} winds up a massive blow... and completely whiffs.",
+        "You parry {0}'s strike and shove them back.",
+        "{0} snaps at you but bites nothing but dust."
+    };
+
+    private readonly Random _random = new();
+
     public void StartGame()
     {
         ShowTitleScreen();
@@ -165,6 +195,7 @@ public class Game
 
     private bool StartCombat(Player player, Enemy enemy)
     {
+        Console.Clear();
         Console.WriteLine($"**** {enemy.Name} appears! ****");
 
         while (player.IsAlive && enemy.IsAlive)
@@ -187,7 +218,7 @@ public class Game
                     }
                     else
                     {
-                        Console.WriteLine("Yikes! You missed.");
+                        Console.WriteLine(_playerMissMessages[_random.Next(_playerMissMessages.Length)]);
                     }
                     break;
                 case "I":
@@ -200,7 +231,9 @@ public class Game
                     }
                     break;
                 default:
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid input, try again.");
+                    Console.ResetColor();
                     continue;
             }
 
@@ -214,7 +247,7 @@ public class Game
             }
             else
             {
-                Console.WriteLine($"{enemy.Name} misses!");
+                Console.WriteLine(string.Format(_enemyMissMessages[_random.Next(_enemyMissMessages.Length)], enemy.Name));
             }
         }
 

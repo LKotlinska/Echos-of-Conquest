@@ -47,7 +47,9 @@ public class Shop
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("You don't have enough gold!");
+                Console.ResetColor();
             }
         }
     }
@@ -64,7 +66,9 @@ public class Shop
 
             if (inventory.Count == 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Nothing to sell!");
+                Console.ResetColor();
                 return; // return instead of break — no point looping back to an empty menu
             }
 
