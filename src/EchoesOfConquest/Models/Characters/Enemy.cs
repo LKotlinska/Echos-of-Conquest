@@ -37,7 +37,7 @@ public class Enemy
 
     public void TakeDamage(int damage)
     {
-        Health -= damage;
+        Health = Math.Max(0, Health - damage);
     }
 
     public Item DropLoot()
@@ -59,14 +59,14 @@ public class Enemy
         ConsoleColor barColor = GetHealthColor();
         ConsoleColor original = Console.ForegroundColor;
         
-        Console.Write($"{Name,-13} [");
+        Console.Write($"  {Name,-13} [");
         Console.ForegroundColor = barColor;
         Console.Write(new string('█', filledWidth));
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.Write(new string('░', emptyWidth));
         Console.ForegroundColor = original;
         double pct = (double)Health / _maxHealth * 100;
-        Console.WriteLine($"] {Health}/{_maxHealth} ({pct:F0}%)");
+        Console.WriteLine($"] {Health,4}/{_maxHealth} ({pct:F0}%)");
     }
 
     private ConsoleColor GetHealthColor()

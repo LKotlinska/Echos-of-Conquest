@@ -49,10 +49,9 @@ public class Player
     {
         if (_isDefending)
         {
-            Health -= (damage / 2);
+            damage /= 2;
         }
-
-        Health -= damage;
+        Health = Math.Max(0, Health - damage);
     }
 
     public void Heal(int amount)
@@ -164,14 +163,14 @@ public class Player
         ConsoleColor barColor = GetHealthColor();
         ConsoleColor original = Console.ForegroundColor;
 
-        Console.Write($"{Name,-13} [");
+        Console.Write($"  {Name,-13} [");
         Console.ForegroundColor = barColor;
         Console.Write(new string('█', filledWidth));
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.Write(new string('░', emptyWidth));
         Console.ForegroundColor = original;
         double pct = (double)Health / MaxHealth * 100;
-        Console.WriteLine($"] {Health}/{MaxHealth} ({pct:F0}%)");
+        Console.WriteLine($"] {Health,4}/{MaxHealth} ({pct:F0}%)");
     }
 
     private ConsoleColor GetHealthColor()

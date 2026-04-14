@@ -196,15 +196,36 @@ public class Game
     private bool StartCombat(Player player, Enemy enemy)
     {
         Console.Clear();
-        Console.WriteLine($"**** {enemy.Name} appears! ****");
+        Console.WriteLine();
+        WriteCombatBanner($" {enemy.Name.ToUpper()} APPEARS! ");
+        Console.WriteLine();
+
+        List<(string message, ConsoleColor color)> combatLog = [];
 
         while (player.IsAlive && enemy.IsAlive)
         {
+            Console.Clear();
+            Console.WriteLine();
+            WriteSectionLine();
             player.DisplayHealthBar();
             Console.WriteLine();
             enemy.DisplayHealthBar();
+            WriteSectionLine();
+            Console.WriteLine();
 
-            Console.WriteLine("[A]ttack | [I]tem");
+            var recent = combatLog.TakeLast(4).ToList();
+            foreach (var (msg, color) in recent)
+            {
+                Console.ForegroundColor = color;
+                Console.WriteLine($"  {msg}");
+            }
+            for (int pad = recent.Count; pad < 4; pad++)
+                Console.WriteLine();
+            Console.ResetColor();
+
+            WriteSectionLine();
+            Console.WriteLine("  [A]ttack | [I]tem");
+            Console.Write("  > ");
             var choice = Console.ReadLine()?.ToUpper() ?? "";
 
             switch (choice)
@@ -214,26 +235,22 @@ public class Game
                     {
                         int dmg = player.RollDamage();
                         enemy.TakeDamage(dmg);
-                        Console.WriteLine($"You hit {enemy.Name} for {dmg} damage!");
+                        combatLog.Add(($"You hit {enemy.Name} for {dmg} damage!", ConsoleColor.Green));
                     }
                     else
                     {
-                        Console.WriteLine(_playerMissMessages[_random.Next(_playerMissMessages.Length)]);
+                        combatLog.Add((_playerMissMessages[_random.Next(_playerMissMessages.Length)], ConsoleColor.DarkYellow));
                     }
                     break;
                 case "I":
                     player.ShowInventory();
-                    Console.WriteLine("[B]ack");
+                    Console.WriteLine("  [B]ack");
                     var combatItemInput = Console.ReadLine()?.ToUpper() ?? "";
-                    if (combatItemInput != "B" && int.TryParse(combatItemInput, out int i))
-                    {
-                        player.UseItem(i);
-                    }
+                    if (combatItemInput != "B" && int.TryParse(combatItemInput, out int idx))
+                        player.UseItem(idx);
                     break;
                 default:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid input, try again.");
-                    Console.ResetColor();
+                    combatLog.Add(("Invalid input — try again.", ConsoleColor.DarkGray));
                     continue;
             }
 
@@ -243,18 +260,63 @@ public class Game
             {
                 int dmg = enemy.RollDamage();
                 player.TakeDamage(dmg);
-                Console.WriteLine($"{enemy.Name} hits you for {dmg} damage!");
+                combatLog.Add(($"{enemy.Name} hits you for {dmg} damage!", ConsoleColor.Red));
             }
             else
             {
-                Console.WriteLine(string.Format(_enemyMissMessages[_random.Next(_enemyMissMessages.Length)], enemy.Name));
+                combatLog.Add((string.Format(_enemyMissMessages[_random.Next(_enemyMissMessages.Length)], enemy.Name), ConsoleColor.DarkGray));
             }
         }
 
+        // Final screen showing last events and outcome
+        Console.Clear();
+        Console.WriteLine();
+        WriteSectionLine();
+        player.DisplayHealthBar();
+        Console.WriteLine();
+        enemy.DisplayHealthBar();
+        WriteSectionLine();
+        Console.WriteLine();
+
+        foreach (var (msg, color) in combatLog.TakeLast(4))
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine($"  {msg}");
+        }
+        Console.ResetColor();
+        Console.WriteLine();
+        WriteSectionLine();
+
         if (!enemy.IsAlive)
-            Console.WriteLine($"\nYou defeated the {enemy.Name}!");
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"\n  *** You defeated the {enemy.Name}! ***\n");
+            Console.ResetColor();
+        }
 
         return player.IsAlive;
+    }
+
+    private static void WriteSectionLine()
+    {
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine("  " + new string('─', 50));
+        Console.ResetColor();
+    }
+
+    private static void WriteCombatBanner(string text)
+    {
+        int innerWidth = Math.Max(text.Length, 32);
+        if ((innerWidth - text.Length) % 2 != 0) innerWidth++;
+        int padding = (innerWidth - text.Length) / 2;
+        string paddedText = new string(' ', padding) + text + new string(' ', padding);
+        string border = new string('═', innerWidth);
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine($"  ╔{border}╗");
+        Console.WriteLine($"  ║{paddedText}║");
+        Console.WriteLine($"  ╚{border}╝");
+        Console.ResetColor();
     }
 
     private static void ShowTitleScreen()
