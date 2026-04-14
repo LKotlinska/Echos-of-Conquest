@@ -55,11 +55,11 @@ public class Player
 
     public void Heal(int amount)
     {
-        if ((Health += amount) > MaxHealth)
+        Health += amount;
+        if (Health > MaxHealth)
         {
             Health = MaxHealth;
         }
-        Health += amount;
     }
     public void Defend()
     {
