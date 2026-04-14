@@ -98,7 +98,9 @@ public class Player
     {
         if (_inventory.Count == 0)
         {
-            Console.WriteLine("Inventory is empty.");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Your inventory is empty.");
+            Console.ResetColor();
             return;
         }
         for (int i = 0; i < _inventory.Count; i++)

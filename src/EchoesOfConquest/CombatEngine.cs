@@ -36,26 +36,34 @@ public class CombatEngine
 
     public bool StartCombat(Player player, Enemy enemy)
     {
-        Console.Clear();
-        Console.WriteLine();
-        WriteCombatBanner($" {enemy.Name.ToUpper()} APPEARS! ");
-        Console.WriteLine();
 
         List<(string message, ConsoleColor color)> combatLog = [];
+        bool firstTurn = true;
 
         while (player.IsAlive && enemy.IsAlive)
         {
             Console.Clear();
+
+            // Shows alert on first turn only to reduce clutter.
+            if (firstTurn)
+            {
+                Console.WriteLine();
+                WriteCombatBanner($" {enemy.Name.ToUpper()} APPEARS! ");
+                Console.WriteLine();
+                firstTurn = false;
+            }
+
             Console.WriteLine();
-            // —————————————————————
             WriteSectionLine();
+            // —————————————————————
             player.DisplayHealthBar();
             Console.WriteLine();
-            // —————————————————————
             enemy.DisplayHealthBar();
+            // —————————————————————
             WriteSectionLine();
             Console.WriteLine();
 
+            // Fo readability only last 4 combat msgs.
             var recent = combatLog.TakeLast(4).ToList();
             foreach (var (msg, color) in recent)
             {
@@ -63,8 +71,12 @@ public class CombatEngine
                 Console.WriteLine($"  {msg}");
             }
 
+            // Locks combat log to 4 rows height.
             for (int pad = recent.Count; pad < 4; pad++)
+            {
                 Console.WriteLine();
+            }
+
             Console.ResetColor();
             // —————————————————————
             WriteSectionLine();
@@ -88,10 +100,16 @@ public class CombatEngine
                     break;
                 case "I":
                     player.ShowInventory();
+
                     Console.WriteLine("  [B]ack");
+                    Console.Write("\n > ");
+
                     var combatItemInput = Console.ReadLine()?.ToUpper() ?? "";
+
                     if (combatItemInput != "B" && int.TryParse(combatItemInput, out int idx))
+                    {
                         player.UseItem(idx);
+                    }
                     break;
                 default:
                     combatLog.Add(("Invalid input — try again.", ConsoleColor.DarkGray));
@@ -146,7 +164,7 @@ public class CombatEngine
     private static void WriteSectionLine()
     {
         Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.WriteLine("  " + new string('─', 50));
+        Console.WriteLine("  " + new string('─', 70));
         Console.ResetColor();
     }
 
