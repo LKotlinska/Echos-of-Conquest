@@ -27,7 +27,7 @@ public class Game
         bool quit = false;
         while (!quit && _player.IsAlive && _enemies.Count > 0)
         {
-            Console.WriteLine($"\n[S]hop | [I]nventory | [F]ight ({_enemies.Count} enemies remaining) | [C]haracter | [Q]uit");
+            Console.WriteLine($"\n[S]hop\n[I]nventory\n[F]ight ({_enemies.Count} enemies remaining)\n[C]haracter\n[Q]uit");
             var choice = Console.ReadLine()?.ToUpper() ?? "";
 
             switch (choice)

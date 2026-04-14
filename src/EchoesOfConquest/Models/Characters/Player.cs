@@ -144,15 +144,13 @@ public class Player
         int strMod = GetModifier(_strength);
         string strModStr = strMod >= 0 ? $"+{strMod}" : $"{strMod}";
 
-        Console.WriteLine("\n  ╔══════════════════════════════╗");
-        Console.WriteLine($"  ║  {Name,-28}║");
-        Console.WriteLine($"  ║  {PlayerClass.Name,-28}║");
-        Console.WriteLine("  ╠══════════════════════════════╣");
-        Console.WriteLine($"  ╠═ HP  {Health}/{MaxHealth,-24}");
-        Console.WriteLine($"  ╠═ STR {_strength} ({strModStr})  AC {ArmorClass,-16}");
-        Console.WriteLine($"  ╠═ Weapon: {weaponName} (d{weaponDie}){new string(' ', Math.Max(0, 19 - weaponName.Length - weaponDie.ToString().Length))}");
-        Console.WriteLine($"  ╠═ Gold: {Gold,-22}║");
-        Console.WriteLine("  ╚═══════════════════════════════");
+        Console.WriteLine($"  ║ {Name.ToUpper()}");
+        Console.WriteLine($"  ║ {PlayerClass.Name.ToUpper()}");
+        Console.WriteLine($"  ╠══ HP  {Health}/{MaxHealth}");
+        Console.WriteLine($"  ╠══ STR {_strength} ({strModStr})  AC {ArmorClass}");
+        Console.WriteLine($"  ╠══ Weapon: {weaponName} (d{weaponDie})");
+        Console.WriteLine($"  ╠══ Gold: {Gold}");
+
     }
 
     public void DisplayHealthBar()
