@@ -48,8 +48,8 @@ public class Enemy
     public int DropGold()
     {
         return _goldDrop;
-    } 
-    
+    }
+
     public void DisplayHealthBar()
     {
         int barWidth = 30;
@@ -58,7 +58,7 @@ public class Enemy
 
         ConsoleColor barColor = GetHealthColor();
         ConsoleColor original = Console.ForegroundColor;
-        
+
         Console.Write($"  {Name,-13} [");
         Console.ForegroundColor = barColor;
         Console.Write(new string('█', filledWidth));
@@ -71,10 +71,11 @@ public class Enemy
 
     private ConsoleColor GetHealthColor()
     {
+        // Green above 60%, yellow above 30%, red below. Same as player's health bar.
         double pct = (double)Health / _maxHealth;
-        return  pct > 0.6 ? ConsoleColor.Green :
+        return pct > 0.6 ? ConsoleColor.Green :
             pct > 0.3 ? ConsoleColor.Yellow :
             ConsoleColor.Red;
     }
-    
+
 }

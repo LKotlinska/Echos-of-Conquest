@@ -76,6 +76,7 @@ public class Game
     private static void HandleLoot(Player player, Enemy enemy)
     {
         var loot = enemy.DropLoot();
+        // Not every enemy is guaranteed to drop loot, so guard before adding.
         if (loot != null)
         {
             player.AddToInventory(loot);

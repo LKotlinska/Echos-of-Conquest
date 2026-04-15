@@ -39,6 +39,7 @@ public class Player
         {
             return _equippedWeapon.RollDamage();
         }
+        // Fallback in case the player somehow has no weapon equipped.
         return DiceRoller.Roll(4);
     }
 
@@ -48,12 +49,14 @@ public class Player
         {
             damage /= 2;
         }
+        // Clamps to 0 so health never goes negative.
         Health = Math.Max(0, Health - damage);
     }
 
     public void Heal(int amount)
     {
         Health += amount;
+        // Caps at MaxHealth so potions can't overheal.
         if (Health > MaxHealth)
         {
             Health = MaxHealth;
@@ -128,12 +131,17 @@ public class Player
                 Console.ResetColor();
                 return;
             }
+            if (_equippedWeapon != null)
+                _inventory.Add(_equippedWeapon);
             _equippedWeapon = weapon;
+            // Removes weapon from inventory when equipped, so it can't be sold.
+            _inventory.RemoveAt(choice - 1);
             Console.WriteLine($"You equip {weapon.Name}!");
         }
     }
     private int GetModifier(int score)
     {
+        // Standard D&D modifier formula: every 2 points above/below 10 is +1/-1.
         return (score - 10) / 2;
     }
 

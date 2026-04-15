@@ -34,6 +34,8 @@ public static class CharacterCreation
             input = Console.ReadLine();
         }
 
+        // New instance here instead of reusing from the display array,
+        // so the player object always owns a fresh class with no shared state.
         PlayerClass playerClass = classChoice switch
         {
             1 => new Fighter(),

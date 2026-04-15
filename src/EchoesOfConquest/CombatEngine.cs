@@ -108,15 +108,18 @@ public class CombatEngine
 
                     if (combatItemInput == "B" || !int.TryParse(combatItemInput, out int idx))
                     {
+                        // Skip the enemy's attack turn if the player backed out of the item menu.
                         continue;
                     }
                     player.UseItem(idx);
                     break;
                 default:
                     combatLog.Add(("Invalid input. Try again.", ConsoleColor.DarkGray));
+                    // Skip the enemy's attack turn on invalid input — player shouldn't be punished for a typo.
                     continue;
             }
 
+            // Don't let a dead enemy attack... check before the enemy's turn.
             if (!enemy.IsAlive) break;
 
             if (enemy.RollToHit(player.ArmorClass))
