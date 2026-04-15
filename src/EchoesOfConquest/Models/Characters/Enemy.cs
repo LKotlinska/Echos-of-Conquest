@@ -71,6 +71,7 @@ public class Enemy
 
     private ConsoleColor GetHealthColor()
     {
+        // Green above 60%, yellow above 30%, red below — mirrors the player's health bar logic.
         double pct = (double)Health / _maxHealth;
         return  pct > 0.6 ? ConsoleColor.Green :
             pct > 0.3 ? ConsoleColor.Yellow :
