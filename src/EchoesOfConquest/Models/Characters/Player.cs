@@ -39,10 +39,7 @@ public class Player
         {
             return _equippedWeapon.RollDamage();
         }
-        else
-        {
-            return DiceRoller.Roll(4);
-        }
+        return DiceRoller.Roll(4);
     }
 
     public void TakeDamage(int damage)
@@ -99,7 +96,7 @@ public class Player
         if (_inventory.Count == 0)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Your inventory is empty.");
+            Console.WriteLine("\nYour inventory is empty.");
             Console.ResetColor();
             return;
         }
@@ -143,7 +140,7 @@ public class Player
     public void ShowCharacterSheet()
     {
         string weaponName = _equippedWeapon?.Name ?? "Bare hands";
-        int weaponDie = _equippedWeapon?.DamageSides ?? 4;
+        int weaponDie = _equippedWeapon?.DamageSides ?? _strength;
         int strMod = GetModifier(_strength);
         string strModStr = strMod >= 0 ? $"+{strMod}" : $"{strMod}";
 
@@ -174,7 +171,6 @@ public class Player
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(bottom);
         Console.ResetColor();
-        Console.WriteLine();
     }
 
     public void DisplayHealthBar()
