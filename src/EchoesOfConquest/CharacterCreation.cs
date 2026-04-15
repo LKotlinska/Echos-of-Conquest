@@ -14,7 +14,7 @@ public static class CharacterCreation
             name = Console.ReadLine()?.Trim();
         } while (string.IsNullOrEmpty(name));
 
-        var classes = new PlayerClass[] { new Fighter(), new Rogue(), new Wizard() };
+        var classes = new PlayerClass[] { new Fighter(), new Rogue(), new Wizard(), new Paladin() };
 
         Console.WriteLine("\nChoose your class:\n");
         for (int i = 0; i < classes.Length; i++)
@@ -28,7 +28,7 @@ public static class CharacterCreation
 
         int classChoice;
         string? input = null;
-        while (!int.TryParse(input, out classChoice) || classChoice < 1 || classChoice > 3)
+        while (!int.TryParse(input, out classChoice) || classChoice < 1 || classChoice > 4)
         {
             Console.Write("Your choice: ");
             input = Console.ReadLine();
@@ -39,6 +39,7 @@ public static class CharacterCreation
             1 => new Fighter(),
             2 => new Rogue(),
             3 => new Wizard(),
+            4 => new Paladin(),
             _ => throw new InvalidOperationException("Unreachable"),
         };
 
