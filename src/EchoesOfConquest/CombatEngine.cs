@@ -102,17 +102,18 @@ public class CombatEngine
                     player.ShowInventory();
 
                     Console.WriteLine("  [B]ack");
-                    Console.Write("\n > ");
+                    Console.Write(" > ");
 
                     var combatItemInput = Console.ReadLine()?.ToUpper() ?? "";
 
-                    if (combatItemInput != "B" && int.TryParse(combatItemInput, out int idx))
+                    if (combatItemInput == "B" || !int.TryParse(combatItemInput, out int idx))
                     {
-                        player.UseItem(idx);
+                        continue;
                     }
+                    player.UseItem(idx);
                     break;
                 default:
-                    combatLog.Add(("Invalid input — try again.", ConsoleColor.DarkGray));
+                    combatLog.Add(("Invalid input. Try again.", ConsoleColor.DarkGray));
                     continue;
             }
 

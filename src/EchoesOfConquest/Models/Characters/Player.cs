@@ -88,7 +88,7 @@ public class Player
     public void AddGold(int amount)
     {
         Gold += amount;
-        Console.WriteLine($"  You received {amount} gold! (Total: {Gold})");
+        Console.WriteLine($"  You received {amount} gold!");
     }
 
     public void ShowInventory()

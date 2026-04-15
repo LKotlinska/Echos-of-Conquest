@@ -17,7 +17,7 @@ public class Game
         bool quit = false;
         while (!quit && player.IsAlive && enemies.Count > 0)
         {
-            PrintMainMenu(enemies.Count);
+            PrintMainMenu();
             Console.Write(" > ");
             var choice = Console.ReadLine()?.ToUpper() ?? "";
 
@@ -35,11 +35,11 @@ public class Game
             Console.WriteLine("You have fallen in battle... Game Over.");
     }
 
-    private static void PrintMainMenu(int enemyCount)
+    private static void PrintMainMenu()
     {
         Console.WriteLine("\n[S]hop");
         Console.WriteLine("[I]nventory");
-        Console.WriteLine($"[F]ight  ({enemyCount} enemies remaining)");
+        Console.WriteLine("[F]ight");
         Console.WriteLine("[C]haracter");
         Console.WriteLine("[Q]uit");
     }
@@ -67,7 +67,7 @@ public class Game
                 break;
             }
 
-            Console.Write("Do you want to continue? [Y/N]: ");
+            Console.Write("\nDo you want to continue? [Y/N]: ");
             string continueChoice = Console.ReadLine()?.ToUpper() ?? "";
             if (continueChoice != "Y") break;
         }

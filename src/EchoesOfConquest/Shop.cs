@@ -19,18 +19,17 @@ public class Shop
             .Where(i => i is not Weapon w || w.RequiredClass == "Any" || w.RequiredClass == player.PlayerClass.Name)
             .ToList();
         Console.WriteLine();
+        Console.WriteLine($"Gold: {player.Gold}g");
 
+        for (int i = 0; i < available.Count; i++)
+        {
+            Console.WriteLine($"[{i + 1}] {available[i].GetInfo()}");
+        }
+
+        Console.WriteLine("[B]ack");
 
         while (true)
         {
-            Console.WriteLine($"Gold: {player.Gold}g");
-
-            for (int i = 0; i < available.Count; i++)
-            {
-                Console.WriteLine($"[{i + 1}] {available[i].GetInfo()}");
-            }
-
-            Console.WriteLine("[B]ack");
             Console.Write(" > ");
 
             var input = Console.ReadLine()?.ToUpper();
@@ -39,7 +38,7 @@ public class Shop
             if (!int.TryParse(input, out int choice) || choice < 1 || choice > available.Count)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\n- I don't follow you. Buy? Sell? Or get out of my shop.");
+                Console.WriteLine("- I don't follow you. Buy? Sell? Or get out of my shop.");
                 Console.ResetColor();
                 continue;
             }
@@ -51,14 +50,14 @@ public class Shop
             {
                 player.AddToInventory(item);
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\nYou bought {item.Name}!");
+                Console.WriteLine($"You bought {item.Name}!");
                 Console.ResetColor();
 
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nCome back when you've got the coin, friend.");
+                Console.WriteLine("Come back when you've got the coin, friend.");
                 Console.ResetColor();
             }
         }
