@@ -18,7 +18,7 @@ public class Game
         while (!quit && player.IsAlive && enemies.Count > 0)
         {
             PrintMainMenu(enemies.Count);
-            Console.Write("\n > ");
+            Console.Write(" > ");
             var choice = Console.ReadLine()?.ToUpper() ?? "";
 
             switch (choice)
@@ -37,8 +37,7 @@ public class Game
 
     private static void PrintMainMenu(int enemyCount)
     {
-        Console.Clear();
-        Console.WriteLine("[S]hop");
+        Console.WriteLine("\n[S]hop");
         Console.WriteLine("[I]nventory");
         Console.WriteLine($"[F]ight  ({enemyCount} enemies remaining)");
         Console.WriteLine("[C]haracter");

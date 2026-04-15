@@ -9,10 +9,10 @@ public class CombatEngine
         "Your swing cuts through nothing but air!",
         "You lunge forward, but your opponent sidesteps with ease.",
         "Your weapon glances off their armor harmlessly.",
-        "You stumble mid-swing — embarrassing, but survivable.",
+        "You stumble mid-swing - embarrassing, but survivable.",
         "A wild slash! You hit absolutely nothing.",
         "You overcommit and whiff completely.",
-        "Your attack was telegraphed — they saw it coming a mile away.",
+        "Your attack was telegraphed - they saw it coming a mile away.",
         "You strike with conviction... at the empty space beside them.",
         "Your blade finds only shadow where your foe once stood.",
         "A clumsy swing. Even the rats aren't impressed."
@@ -24,7 +24,7 @@ public class CombatEngine
         "{0} swings wildly and misses by a hair!",
         "{0} strikes at your chest, but your armor deflects the blow.",
         "{0} trips over its own feet mid-attack!",
-        "{0} snarls and slashes — but you're already out of reach.",
+        "{0} snarls and slashes - but you're already out of reach.",
         "You duck under {0}'s clumsy strike with room to spare.",
         "{0} hurls an attack that sails past your ear. Close one!",
         "{0} winds up a massive blow... and completely whiffs.",
@@ -81,7 +81,7 @@ public class CombatEngine
             // —————————————————————
             WriteSectionLine();
             Console.WriteLine("  [A]ttack | [I]tem");
-            Console.Write("  > ");
+            Console.Write(" > ");
             var choice = Console.ReadLine()?.ToUpper() ?? "";
 
             switch (choice)
