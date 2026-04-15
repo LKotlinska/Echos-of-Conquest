@@ -6,6 +6,7 @@ public static class CharacterCreation
 {
     public static Player Create()
     {
+        Console.Clear();
         string? name;
         do
         {
@@ -25,13 +26,20 @@ public static class CharacterCreation
             Console.WriteLine();
         }
 
-        Console.Write("Your choice: ");
-        PlayerClass playerClass = Console.ReadLine() switch
+        int classChoice;
+        string? input = null;
+        while (!int.TryParse(input, out classChoice) || classChoice < 1 || classChoice > 3)
         {
-            "1" => new Fighter(),
-            "2" => new Rogue(),
-            "3" => new Wizard(),
-            _   => new Fighter()
+            Console.Write("Your choice: ");
+            input = Console.ReadLine();
+        }
+
+        PlayerClass playerClass = classChoice switch
+        {
+            1 => new Fighter(),
+            2 => new Rogue(),
+            3 => new Wizard(),
+            _ => throw new InvalidOperationException("Unreachable"),
         };
 
         Console.Clear();
