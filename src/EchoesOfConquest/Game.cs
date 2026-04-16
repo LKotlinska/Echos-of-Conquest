@@ -54,6 +54,8 @@ public class Game
         while (player.IsAlive && enemies.Count > 0)
         {
             Console.Clear();
+            // Clears whole console
+            Console.WriteLine("\x1b[3J");
             var enemy = enemies.Dequeue();
             bool survived = _combat.StartCombat(player, enemy);
 
@@ -67,7 +69,7 @@ public class Game
                 break;
             }
 
-            Console.Write("\nDo you want to continue? [Y/N]: ");
+            Console.Write("\nDo you want to continue fighting? [Y/N]: ");
             string continueChoice = Console.ReadLine()?.ToUpper() ?? "";
             if (continueChoice != "Y") break;
         }

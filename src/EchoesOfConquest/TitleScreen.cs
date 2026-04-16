@@ -4,6 +4,9 @@ public static class TitleScreen
 {
     public static void Show()
     {
+        Console.Clear();
+        // Clears whole console
+        Console.WriteLine("\x1b[3J");
         string[] title = [
             "  ▄▄▄▄▄▄▄                                        ▄▄   ▄   ▄▄▄▄",
             " █▀██▀▀▀        █▄                              ██    ▀██████▀                                     █▄",
