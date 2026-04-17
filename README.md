@@ -25,12 +25,12 @@ A turn-based combat RPG built in C# (.NET 10), inspired by D&D 5e mechanics. Cre
    - `[I]nventory` — view and use items outside of combat
    - `[C]haracter` — view your character sheet
    - `[Q]uit` — exit (prompts for confirmation)
-4. In combat, choose `[A]ttack`, `[I]tem`, or `[D]efend` each turn
-5. Defeat all seven enemies to win
+4. In combat, choose `[A]ttack` or `[I]tem`
+5. Defeat all enemies to win
 
 ## Playable Classes
 
-| Class   | HP  | STR | AC  | Starting Weapon | Flavour                                         |
+| Class   | HP  | STR | AC  | Starting Weapon | Desc                                         |
 | ------- | --- | --- | --- | --------------- | ----------------------------------------------- |
 | Fighter | 120 | 16  | 16  | Longsword (d10) | A wall of steel who hits hard and takes harder. |
 | Rogue   | 90  | 14  | 14  | Dagger (d8)     | A stealthy, quick-witted opportunist.           |
@@ -77,7 +77,7 @@ dotnet run --project src/EchoesOfConquest
 
 ### Class Skills
 
-Each class should have at least one active skill usable in combat, costing nothing but a turn:
+Each class should have at least one active skill/cantrip usable in combat, costing nothing but a turn:
 
 ### More D&D Mechanics
 
