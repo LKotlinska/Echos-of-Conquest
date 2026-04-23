@@ -9,7 +9,8 @@ public class Player
     public int ArmorClass { get; set; }
     public bool IsAlive => Health > 0;
     public int Gold { get; set; }
-
+    public int MaxMana { get; set; }
+    public int Mana { get; set; }
 
     private int _strength;
     private bool _isDefending;
@@ -23,6 +24,8 @@ public class Player
         PlayerClass = playerClass;
         MaxHealth = playerClass.MaxHealth;
         Health = playerClass.MaxHealth;
+        MaxMana = playerClass.MaxMana;
+        Mana = playerClass.MaxMana;
         ArmorClass = playerClass.ArmorClass;
         _strength = playerClass.Strength;
         _equippedWeapon = playerClass.StartingWeapon;

@@ -7,5 +7,8 @@ public class Wizard : PlayerClass
     public override int MaxHealth => 70;
     public override int Strength => 10;
     public override int ArmorClass => 12;
+    public override int MaxMana => 90;
+    public override int Mana => MaxMana;
     public override Weapon StartingWeapon => new Weapon("Staff", 20, 9, "Wizard");
+    
 }

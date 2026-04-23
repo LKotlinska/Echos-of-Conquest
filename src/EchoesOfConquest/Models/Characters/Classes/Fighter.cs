@@ -7,5 +7,8 @@ public class Fighter : PlayerClass
     public override int MaxHealth => 120;
     public override int Strength => 16;
     public override int ArmorClass => 16;
+    
+    public override int MaxMana => 0;
+    public override int Mana => MaxMana;
     public override Weapon StartingWeapon => new Weapon("Longsword", 25, 10, "Fighter");
 }

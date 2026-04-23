@@ -7,5 +7,8 @@ public class Paladin : PlayerClass
     public override int MaxHealth => 110;
     public override int Strength => 15;
     public override int ArmorClass => 17;
+    
+    public override int MaxMana => 0;
+    public override int Mana => MaxMana;
     public override Weapon StartingWeapon => new Weapon("Warhammer", 25, 10, "Paladin");
 }
