@@ -1,4 +1,6 @@
-namespace EchoesOfConquest.Models;
+using EchoesOfConquest.Models.Spells;
+
+namespace EchoesOfConquest.Models.Characters.Classes;
 
 public class Wizard : PlayerClass
 {
@@ -10,5 +12,9 @@ public class Wizard : PlayerClass
     public override int MaxMana => 90;
     public override int Mana => MaxMana;
     public override Weapon StartingWeapon => new Weapon("Staff", 20, 9, "Wizard");
-    
+    public override List<Spell> StartingSpells =>
+    [
+        new("Frostbolt", "Frost", 2, 6,  5, "Wizard", saveDc: 12),
+        new("Fireball",  "Fire",  3, 6,  8, "Wizard", saveDc: 14),
+    ];
 }

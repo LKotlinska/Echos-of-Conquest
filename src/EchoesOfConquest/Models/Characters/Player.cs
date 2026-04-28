@@ -1,4 +1,8 @@
+using EchoesOfConquest.Models.Spells;
+
 namespace EchoesOfConquest.Models;
+
+using EchoesOfConquest.Models.Characters;
 
 public class Player
 {
@@ -16,6 +20,7 @@ public class Player
     private bool _isDefending;
     private Weapon? _equippedWeapon;
     private List<Item> _inventory = new();
+    private List<Spell> _spellBook = new();
 
     public Player(string name, PlayerClass playerClass, int gold = 50)
     {
@@ -29,6 +34,7 @@ public class Player
         ArmorClass = playerClass.ArmorClass;
         _strength = playerClass.Strength;
         _equippedWeapon = playerClass.StartingWeapon;
+        _spellBook = playerClass.StartingSpells;
     }
 
     public bool RollToHit(int targetArmor)
@@ -66,6 +72,22 @@ public class Player
         }
     }
 
+    public (int damage, bool saved)? CastSpell(Spell spell, Enemy enemy)
+    {
+        if (spell.ManaCost > Mana)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nYou don't have enough mana to cast this spell.");
+            Console.ResetColor();
+            return null;
+        }
+        bool saved = enemy.RollSave(spell.SaveDC);
+        int dmg = spell.RollDamage();
+        if (saved) dmg /= 2;
+        Mana -= spell.ManaCost;
+        enemy.TakeDamage(dmg);
+        return (dmg, saved);
+    }
     public void AddToInventory(Item item)
     {
         _inventory.Add(item);
@@ -76,6 +98,10 @@ public class Player
         return _inventory;
     }
 
+    public List<Spell> GetSpells()
+    {
+        return _spellBook;
+    }
     public void RemoveFromInventory(int index)
     {
         _inventory.RemoveAt(index);
@@ -112,6 +138,19 @@ public class Player
         }
     }
 
+    public void ShowSpells()
+    {
+        if (_spellBook.Count == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nYou can't cast any spells.");
+            Console.ResetColor();
+        }
+        for (var i = 0; i < _spellBook.Count; i++)
+        {
+            Console.WriteLine($"[{i + 1}] {_spellBook[i].Name} | {_spellBook[i].DamageType} | {_spellBook[i].NumberOfDice}d{_spellBook[i].DamageSides} | Cost: {_spellBook[i].ManaCost} mana");
+        }
+    }
     public void UseItem(int choice)
     {
         if (choice < 1 || choice > _inventory.Count)
@@ -142,6 +181,8 @@ public class Player
             Console.WriteLine($"You equip {weapon.Name}!");
         }
     }
+
+
     private int GetModifier(int score)
     {
         // Standard D&D modifier formula: every 2 points above/below 10 is +1/-1.
@@ -193,7 +234,7 @@ public class Player
         ConsoleColor barColor = GetHealthColor();
         ConsoleColor original = Console.ForegroundColor;
 
-        Console.Write($"  {Name,-13} [");
+        Console.Write($"  {Name,-13} HP [");
         Console.ForegroundColor = barColor;
         Console.Write(new string('█', filledWidth));
         Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -201,6 +242,26 @@ public class Player
         Console.ForegroundColor = original;
         double pct = (double)Health / MaxHealth * 100;
         Console.WriteLine($"] {Health,4}/{MaxHealth} ({pct:F0}%)");
+    }
+
+    public void DisplayManaBar()
+    {
+        if (MaxMana == 0) return;
+
+        int barWidth = 30;
+        int filledWidth = (int)((double)Mana / MaxMana * barWidth);
+        int emptyWidth = barWidth - filledWidth;
+
+        ConsoleColor original = Console.ForegroundColor;
+
+        Console.Write($"  {" ",-13} MP [");
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.Write(new string('█', filledWidth));
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write(new string('░', emptyWidth));
+        Console.ForegroundColor = original;
+        double pct = (double)Mana / MaxMana * 100;
+        Console.WriteLine($"] {Mana,4}/{MaxMana} ({pct:F0}%)");
     }
 
     private ConsoleColor GetHealthColor()

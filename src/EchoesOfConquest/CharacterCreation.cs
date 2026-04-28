@@ -1,7 +1,8 @@
 namespace EchoesOfConquest;
 
 using EchoesOfConquest.Models;
-
+using EchoesOfConquest.Models.Characters;
+using EchoesOfConquest.Models.Characters.Classes;
 public static class CharacterCreation
 {
     public static Player Create()

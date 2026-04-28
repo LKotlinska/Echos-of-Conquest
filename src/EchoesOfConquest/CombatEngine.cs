@@ -43,6 +43,7 @@ public class CombatEngine
         while (player.IsAlive && enemy.IsAlive)
         {
             Console.Clear();
+            Console.WriteLine("\x1b[3J");
 
             // Shows alert on first turn only to reduce clutter.
             if (firstTurn)
@@ -57,6 +58,7 @@ public class CombatEngine
             WriteSectionLine();
             // —————————————————————
             player.DisplayHealthBar();
+            player.DisplayManaBar();
             Console.WriteLine();
             enemy.DisplayHealthBar();
             // —————————————————————
@@ -80,7 +82,7 @@ public class CombatEngine
             Console.ResetColor();
             // —————————————————————
             WriteSectionLine();
-            Console.WriteLine("  [A]ttack | [I]tem");
+            Console.WriteLine("  [A]ttack | [S]pells | [I]tem");
             Console.Write(" > ");
             var choice = Console.ReadLine()?.ToUpper() ?? "";
 
@@ -89,14 +91,40 @@ public class CombatEngine
                 case "A":
                     if (player.RollToHit(enemy.ArmorClass))
                     {
-                        int dmg = player.RollDamage();
-                        enemy.TakeDamage(dmg);
-                        combatLog.Add(($"You hit {enemy.Name} for {dmg} damage!", ConsoleColor.Green));
+                        int pDmg = player.RollDamage();
+                        enemy.TakeDamage(pDmg);
+                        combatLog.Add(($"You hit {enemy.Name} for {pDmg} damage!", ConsoleColor.Green));
                     }
                     else
                     {
                         combatLog.Add((_playerMissMessages[_random.Next(_playerMissMessages.Length)], ConsoleColor.DarkYellow));
                     }
+                    break;
+                case "S":
+                    player.ShowSpells();
+
+                    Console.WriteLine("  [B]ack");
+                    Console.Write(" > ");
+
+                    var spellInput = Console.ReadLine()?.ToUpper() ?? "";
+
+                    if (spellInput == "B" || !int.TryParse(spellInput, out int spellNr))
+                    {
+                        // Skip the enemy's attack turn if the player backed out of the item menu.
+                        continue;
+                    }
+
+                    var spells = player.GetSpells();
+                    var result = player.CastSpell(spells[spellNr - 1], enemy);
+
+                    if (result == null)
+                    {
+                        continue;
+                    }
+
+                    var (dmg, saved) = result.Value;
+                    string saveText = saved ? $"{enemy.Name} resists and takes" : $"{enemy.Name} fails the save and takes";
+                    combatLog.Add(($"You cast {spells[spellNr - 1].Name}! {saveText} {dmg} damage!", ConsoleColor.Green));
                     break;
                 case "I":
                     player.ShowInventory();
@@ -135,6 +163,7 @@ public class CombatEngine
         }
 
         Console.Clear();
+        Console.WriteLine("\x1b[3J");
         Console.WriteLine();
         // —————————————————————
         WriteSectionLine();

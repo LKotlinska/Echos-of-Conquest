@@ -11,10 +11,11 @@ public class Enemy
     private int _damageSides;
     private int _maxHealth;
     private int _goldDrop;
+    private readonly int _saveModifier;
     private Item _loot;
 
     public Enemy(string name, int health, int attackBonus,
-        int damageSides, int armorClass, int goldDrop, Item loot = null)
+        int damageSides, int armorClass, int goldDrop, Item loot = null, int saveModifier = 0)
     {
         Name = name;
         Health = _maxHealth = health;
@@ -22,7 +23,13 @@ public class Enemy
         _goldDrop = goldDrop;
         _attackBonus = attackBonus;
         _damageSides = damageSides;
+        _saveModifier = saveModifier;
         _loot = loot;
+    }
+
+    public bool RollSave(int dc)
+    {
+        return DiceRoller.Roll(20) + _saveModifier >= dc;
     }
 
     public bool RollToHit(int targetArmor)
@@ -59,7 +66,7 @@ public class Enemy
         ConsoleColor barColor = GetHealthColor();
         ConsoleColor original = Console.ForegroundColor;
 
-        Console.Write($"  {Name,-13} [");
+        Console.Write($"  {Name,-16} [");
         Console.ForegroundColor = barColor;
         Console.Write(new string('█', filledWidth));
         Console.ForegroundColor = ConsoleColor.DarkGray;

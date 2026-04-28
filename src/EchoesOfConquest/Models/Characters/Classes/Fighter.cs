@@ -1,4 +1,4 @@
-namespace EchoesOfConquest.Models;
+namespace EchoesOfConquest.Models.Characters.Classes;
 
 public class Fighter : PlayerClass
 {

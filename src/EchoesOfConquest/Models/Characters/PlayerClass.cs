@@ -1,4 +1,6 @@
-namespace EchoesOfConquest.Models;
+using EchoesOfConquest.Models.Spells;
+
+namespace EchoesOfConquest.Models.Characters;
 
 public abstract class PlayerClass
 {
@@ -10,4 +12,5 @@ public abstract class PlayerClass
     public abstract int MaxMana { get; }
     public abstract int Mana { get; }
     public abstract Weapon StartingWeapon { get; }
+    public virtual List<Spell> StartingSpells { get; } = [];
 }

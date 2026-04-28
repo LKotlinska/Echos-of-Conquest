@@ -1,4 +1,6 @@
-namespace EchoesOfConquest.Models;
+using EchoesOfConquest.Models.Spells;
+
+namespace EchoesOfConquest.Models.Characters.Classes;
 
 public class Rogue : PlayerClass
 {
@@ -11,4 +13,10 @@ public class Rogue : PlayerClass
     public override int MaxMana => 30;
     public override int Mana => MaxMana;
     public override Weapon StartingWeapon => new Weapon("Dagger", 15, 8, "Rogue");
+    public override List<Spell> StartingSpells =>
+    [
+        new("Smoke Bomb",  "Shadow", 1, 6,  5,  "Rogue",  saveDc: 11),
+        new("Poison Dart", "Poison", 2, 4,  8,  "Rogue",  saveDc: 12),
+        new("Shadow Step", "Shadow", 2, 6,  12, "Rogue",  saveDc: 13),
+    ];
 }
