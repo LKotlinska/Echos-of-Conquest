@@ -15,8 +15,8 @@ public class Rogue : PlayerClass
     public override Weapon StartingWeapon => new Weapon("Dagger", 15, 8, "Rogue");
     public override List<Spell> StartingSpells =>
     [
-        new("Smoke Bomb",  "Shadow", 1, 6,  5,  "Rogue",  saveDc: 11),
-        new("Poison Dart", "Poison", 2, 4,  8,  "Rogue",  saveDc: 12),
-        new("Shadow Step", "Shadow", 2, 6,  12, "Rogue",  saveDc: 13),
+        new("Smoke Bomb",  "Shadow", 1, 4,  5,  "Rogue",  saveDc: 11),
+        new("Poison Dart", "Poison", 1, 6,  8,  "Rogue",  saveDc: 12),
+        new("Shadow Step", "Shadow", 1, 8,  12, "Rogue",  saveDc: 13),
     ];
 }

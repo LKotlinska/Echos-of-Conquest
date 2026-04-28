@@ -14,7 +14,7 @@ public class Wizard : PlayerClass
     public override Weapon StartingWeapon => new Weapon("Staff", 20, 9, "Wizard");
     public override List<Spell> StartingSpells =>
     [
-        new("Frostbolt", "Frost", 2, 6,  5, "Wizard", saveDc: 12),
-        new("Fireball",  "Fire",  3, 6,  8, "Wizard", saveDc: 14),
+        new("Frostbolt", "Frost", 1, 8,  5, "Wizard", saveDc: 12),
+        new("Fireball",  "Fire",  2, 6,  8, "Wizard", saveDc: 14),
     ];
 }

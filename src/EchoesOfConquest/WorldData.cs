@@ -24,16 +24,16 @@ public static class WorldData
         return
         [
             // Wizard spells — arcane/elemental, high mana pool (90)
-            new Spell("Magic Missile",   "Arcane",    2,  4,  5,  "Wizard", saveDc: 11),
-            new Spell("Frostbolt",        "Frost",     2,  6,  8,  "Wizard", saveDc: 12),
-            new Spell("Fireball",         "Fire",      3,  6,  15, "Wizard", saveDc: 14),
-            new Spell("Chain Lightning",  "Lightning", 3,  8,  20, "Wizard", saveDc: 14),
-            new Spell("Arcane Surge",     "Arcane",    4,  10, 30, "Wizard", saveDc: 16),
+            new Spell("Magic Missile",   "Arcane",    1,  6,  5,  "Wizard", saveDc: 11),
+            new Spell("Frostbolt",        "Frost",     1,  8,  8,  "Wizard", saveDc: 12),
+            new Spell("Fireball",         "Fire",      2,  6,  15, "Wizard", saveDc: 14),
+            new Spell("Chain Lightning",  "Lightning", 2,  8,  20, "Wizard", saveDc: 14),
+            new Spell("Arcane Surge",     "Arcane",    3,  8,  30, "Wizard", saveDc: 16),
 
             // Rogue spells — shadow/poison, small mana pool (30)
-            new Spell("Smoke Bomb",       "Shadow",    1,  6,  5,  "Rogue",  saveDc: 11),
-            new Spell("Poison Dart",      "Poison",    2,  4,  8,  "Rogue",  saveDc: 12),
-            new Spell("Shadow Step",      "Shadow",    2,  6,  12, "Rogue",  saveDc: 13),
+            new Spell("Smoke Bomb",       "Shadow",    1,  4,  5,  "Rogue",  saveDc: 11),
+            new Spell("Poison Dart",      "Poison",    1,  6,  8,  "Rogue",  saveDc: 12),
+            new Spell("Shadow Step",      "Shadow",    1,  8,  12, "Rogue",  saveDc: 13),
         ];
     }
 
